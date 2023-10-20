@@ -1,0 +1,27 @@
+{% include 'include/header.html' %} 
+<body>
+    <div class="container mt-5">
+	<script src="https://cdn.lordicon.com/lordicon-1.1.0.js"></script>
+        <h1>Speech Recognition</h1>
+        <p>Click the microphone and start speaking.</p>
+
+        <!-- Speech recognition button -->
+        <form id="transcript">
+            <button id="startBtn" type="button" class="btn btn-primary" style="background:transparent;border:none;">
+                <lord-icon
+                    src="https://cdn.lordicon.com/pbbsmkso.json"
+                    trigger="hover"
+                    colors="primary:#1c4987,secondary:#0056a4"
+                    style="width:250px;height:250px">
+                </lord-icon>
+            </button>
+        </form>
+        <!-- Display recognition results -->
+        <div id="output" class="mt-3"></div>
+
+        <!-- Stop Button results -->
+        <button id="stopBtn">Stop</button>
+    </div>
+</body>
+
+{% include 'include/footer.html' %} 
