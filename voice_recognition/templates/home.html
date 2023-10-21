@@ -1,6 +1,11 @@
 {% include 'include/header.html' %} 
+
 <link href="static/voice_recognition/home.css" rel="stylesheet">
+<link href="static/voice_recognition/loading.css" rel="stylesheet">
+<link href="static/voice_recognition/loading.min.css" rel="stylesheet">
+
 <body>
+    {% include 'include/preloader.html' %}
     <div class="container mt-5">
         <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
             <div class="col-12 text-center">
@@ -23,4 +28,6 @@
         </div>
     </div>
 </body>
-{% include 'include/footer.html' %} 
+{% include 'include/footer.html' %}
+<script src="static/voice_recognition/speech_recog.js"> </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/load.js/1316434407/load-min.js"> </script>

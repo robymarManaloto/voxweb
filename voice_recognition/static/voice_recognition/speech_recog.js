@@ -1,3 +1,5 @@
+
+const loaderContainer = document.getElementById('loaderContainer');
 const startBtn = document.getElementById("startBtn");
 const output = document.getElementById("output");
 const form = document.getElementById("transcript");
@@ -85,7 +87,8 @@ function gotonext(transcript){
       confirmButtonText: 'Yes, proceed!'
   }).then((result) => {
       if (result.isConfirmed) {
-          form.submit();
+        loaderContainer.style.display = 'grid';
+        loaderContainer.style.transition= 'opacity 0.5s ease-in-out';
       }
   });
 }
