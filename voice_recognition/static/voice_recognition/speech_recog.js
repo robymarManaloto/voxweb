@@ -89,6 +89,30 @@ function gotonext(transcript){
       if (result.isConfirmed) {
         loaderContainer.style.display = 'grid';
         loaderContainer.style.transition= 'opacity 0.5s ease-in-out';
+        sendtranscript(transcript);
       }
+  });
+}
+
+function sendtranscript(transcription){
+  var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+  // Send the AJAX request
+  $.ajax({
+    url: "/process_transcription/",
+    type: "POST",
+    headers: {
+      "X-CSRFToken": csrftoken
+    },
+    data: {
+        'transcription': transcription
+    },
+    success: function (data) {
+        // Redirect to another page after success
+        window.location.href = "/edit-page";
+    },
+    error: function (xhr, status, error) {
+        // Handle error
+        console.error(error);
+    }
   });
 }

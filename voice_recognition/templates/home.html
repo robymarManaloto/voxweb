@@ -1,5 +1,4 @@
 {% include 'include/header.html' %} 
-
 <link href="static/voice_recognition/home.css" rel="stylesheet">
 <link href="static/voice_recognition/loading.css" rel="stylesheet">
 <link href="static/voice_recognition/loading.min.css" rel="stylesheet">
@@ -13,7 +12,8 @@
                 <p>Click the microphone and start speaking.</p>
     
                 <!-- Speech recognition button -->
-                <form id="transcript" action="" >
+                <form id="transcript">
+                    {% csrf_token %}
                     <button id="startBtn" type="button" class="btn btn-primary" style="background:transparent;border:none;">
                         <lord-icon
                             src="https://cdn.lordicon.com/pbbsmkso.json"
@@ -28,6 +28,5 @@
         </div>
     </div>
 </body>
-{% include 'include/footer.html' %}
 <script src="static/voice_recognition/speech_recog.js"> </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/load.js/1316434407/load-min.js"> </script>
+{% include 'include/footer.html' %}
