@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrapeJS Bootstrap Editor</title>
+    <!-- Link Bootstrap CSS from UNPKG -->
+    <link href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Link GrapeJS CSS from UNPKG -->
+    <link href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+
+        #gjs {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="gjs"></div>
+
+    <!-- Load Bootstrap JS from UNPKG -->
+    <script src="https://unpkg.com/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Load GrapeJS and its plugins from UNPKG -->
+    <script src="https://unpkg.com/grapesjs"></script>
+    <script src="https://unpkg.com/grapesjs-preset-webpage"></script>
+    
+    <!-- Load additional GrapeJS plugins -->
+    <script src="https://unpkg.com/grapesjs-blocks-basic"></script>
+    <script src="https://unpkg.com/grapesjs-plugin-export"></script>
+    <script src="https://unpkg.com/grapesjs-style-bg"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/grapesjs-blocks-bootstrap4@0.2.3/dist/grapesjs-blocks-bootstrap4.min.js"></script>
+
+    <!-- Include other GrapeJS plugins and blocks as needed -->
+
+    <script>
+        // Initialize GrapeJS editor with all available plugins and blocks
+        const editor = grapesjs.init({
+            container: '#gjs',
+            fromElement: true,
+            storageManager: false, // Disable storage manager for simplicity
+            plugins: [
+                'grapesjs-preset-webpage',
+                'grapesjs-blocks-basic',
+                'grapesjs-plugin-export',
+                'grapesjs-style-bg',
+                // Include other GrapeJS plugins as needed
+            ],
+        });
+    </script>
+</body>
+
+</html>

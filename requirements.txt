@@ -18,4 +18,3 @@ loguru
 tiktoken
 g4f
 django
-spacy

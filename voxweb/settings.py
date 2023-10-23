@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'voice_recognition',
+    'page_editor',
 ]
 
 MIDDLEWARE = [

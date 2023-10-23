@@ -20,4 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("voice_recognition.urls")),
+    path("", include("page_editor.urls")),
 ]
