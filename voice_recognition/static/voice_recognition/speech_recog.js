@@ -116,3 +116,41 @@ function sendtranscript(transcription){
     }
   });
 }
+
+function sendtranscript(transcription) {
+  var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+
+  // Send the AJAX request
+  $.ajax({
+    url: "/process_transcription/",
+    type: "POST",
+    headers: {
+      "X-CSRFToken": csrftoken
+    },
+    data: {
+      'transcription': transcription
+    },
+    success: function (data) {
+      // Redirect to another page after success
+      window.location.href = "/editor/";
+    },
+    error: function (xhr, status, error) {
+      // Handle error
+      console.error(error);
+      loaderContainer.style.display = 'none';
+      // Display a SweetAlert with an error message and an option to retry
+      Swal.fire({
+        title: 'Error',
+        text: 'There was an error processing the transcription. Retry?',
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonText: 'Retry',
+        cancelButtonText: 'Cancel',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          sendtranscript(transcription);
+        }
+      });
+    }
+  });
+}
