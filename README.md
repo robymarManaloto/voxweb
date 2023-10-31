@@ -35,7 +35,7 @@ List the software and tools that users need to have installed before they can ru
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/yourusername/your-django-app.git
+   git clone https://github.com/robymarManaloto/voxweb.git --recurse-submodules
    ```
 
 2. Navigate to the project directory:
