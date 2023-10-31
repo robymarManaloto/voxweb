@@ -15,7 +15,7 @@ Welcome to the README for your Django application! This document is designed to 
 
 ## Project Overview
 
-Provide a brief introduction to your Django application. Explain its purpose, goals, and any key features. Consider including a screenshot or a link to the live version if applicable.
+VoxWeb: A Speech-Enabled Automatic Website Building System  is a software solution designed to simplify and streamline the process of creating web pages through voice recognition technology.
 
 ## Getting Started
 
@@ -35,7 +35,7 @@ List the software and tools that users need to have installed before they can ru
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/yourusername/your-django-app.git
+   git clone https://github.com/robymarManaloto/voxweb.git  --recurse-submodules
    ```
 
 2. Navigate to the project directory:
@@ -70,19 +70,7 @@ List the software and tools that users need to have installed before they can ru
    pip install -r requirements.txt
    ```
 
-6. Perform database migrations:
-
-   ```bash
-   python manage.py migrate
-   ```
-
-7. Create a superuser for the admin panel:
-
-   ```bash
-   python manage.py createsuperuser
-   ```
-
-8. Start the development server:
+6. Start the development server:
 
    ```bash
    python manage.py runserver
