@@ -1,32 +1,88 @@
 {% include 'include/header.html' %} 
-<link href="static/voice_recognition/home.css" rel="stylesheet">
 <link href="static/voice_recognition/loading.css" rel="stylesheet">
 <link href="static/voice_recognition/loading.min.css" rel="stylesheet">
-
+<link href="static/voice_recognition/background.css" rel="stylesheet">
+<style>
+    .typewrite {
+    color: white;
+    text-decoration: none;
+    font-family: 'Montserrat';
+    font-size: 65px;
+    font-weight: bolder;
+}
+</style>
 <body>
     {% include 'include/preloader.html' %}
     <div class="container mt-5">
         <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
             <div class="col-12 text-center">
-                <h1>Speech Recognition</h1>
-                <p>Click the microphone and start speaking.</p>
-    
+                <h1 id="listening-text" style="display:none">
+                    <a href="" class="typewrite" data-period="100" data-type='[ "Listening...", "What is the purpose of your website?",
+                    "What type of content do you want to include?", "What color scheme do you prefer for your website?",
+                    "Do you have any specific font style in mind?", "Do you have a logo for your website? If yes, describe it.",
+                    "Do you want to include images or videos? What are they about?",  "Do you need a contact form for visitors to reach you?",
+                    "Should there be a blog section? What topics do you want to cover?",     "What keywords best describe your website? (e.g., cooking, photography)",
+                    "Is there a specific location or area you want to target?" ]' style="font-size:50px;">
+                        <span class="wrap"></span>
+                    </a>
+                </h1>
+                <h1 id="first-text">
+                    <a href="" class="typewrite" data-period="3000" data-type='[ "Hi, I am Vox!", "Ready to create a website?", "Say \"Vox\" to start!"]'>
+                        <span class="wrap"></span>
+                    </a> 
+                </h1>
+                <div id="siri-container" ></div> 
                 <!-- Speech recognition button -->
                 <form id="transcript">
                     {% csrf_token %}
+                    <div id="siri-container"></div>
                     <button id="startBtn" type="button" class="btn btn-primary" style="background:transparent;border:none;">
                         <lord-icon
-                            src="https://cdn.lordicon.com/pbbsmkso.json"
-                            trigger="hover"
-                            colors="primary:#1c4987,secondary:#0056a4"
-                            style="width:250px;height:250px">
-                        </lord-icon>
+                        src="https://cdn.lordicon.com/xumlwjxf.json"
+                        trigger="loop"
+                        colors="primary:#DAFFFB,secondary:#dafffb,tertiary:#64ccc5"
+                        style="width:250px;height:250px">
+                    </lord-icon>
                     </button>
                     <input id="output" type="hidden">
                 </form>
             </div>
         </div>
     </div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
 </body>
 <script src="static/voice_recognition/speech_recog.js"> </script>
+<script src="static/voice_recognition/typing.js"></script>
+<script>
+    const siriWave = new SiriWave({
+        container: document.getElementById('siri-container'),
+        width: 600,
+        height: 100,
+        color: '#FFFFFF',
+        speed: 0.05,
+        amplitude: 0.8,
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+        // Check if the microphone is available
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            // Microphone not detected, show SweetAlert
+            loader.style.display = "none";
+            Swal.fire({
+                title: 'Microphone Not Detected',
+                text: 'Please make sure your microphone is connected and try again.',
+                icon: 'error',
+                confirmButtonText: 'Go Back',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // User clicked "Go Back", navigate back
+                    window.history.back();
+                }
+            });
+        }
+    });
+</script>
 {% include 'include/footer.html' %}

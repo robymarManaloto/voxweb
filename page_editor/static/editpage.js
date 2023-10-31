@@ -47,39 +47,64 @@
   function exportPagesToZIP(editor) {
     const zip = new JSZip();
     const css = zip.folder("css");
-  
+    
     const pages = editor.Pages;
-    // Get an array of all pages
     const allPages = pages.getAll();
-
-    // Loop through all pages and extract HTML and CSS code
-    allPages.forEach(page => {
-      // Get the HTML/CSS code from the page component
-      const component = page.getMainComponent();
-      const html = editor.getHtml({ component });
-      const pageCSS = editor.getCss({ component });
-
-      const pageHTML = `
-      <html>
-      <head>
-        <title>${page.get('name')}</title>
-        <link rel="stylesheet" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\">
-        <link rel="stylesheet" href=\"css/${page.get('name')}.css\">
-      </head>
-      <body>
-        ${html}                    
-      </body>
-      </html>
-    `;
-
-      zip.file(`${page.get('name')}.html`, pageHTML);
-      css.file(`${page.get('name')}.css`, pageCSS);
-    });
-
-    zip.generateAsync({ type: "blob" })
-      .then(function (content) {
-        saveAs(content, "website.zip");
+    
+    try {
+      allPages.forEach(page => {
+        const component = page.getMainComponent();
+        const html = editor.getHtml({ component });
+        const pageCSS = editor.getCss({ component });
+    
+        const pageHTML = `
+          <html>
+          <head>
+            <title>${page.get('name')}</title>
+            <link rel="stylesheet" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\">
+            <link rel="stylesheet" href=\"css/${page.get('name')}.css\">
+          </head>
+          <body>
+            ${html}                    
+          </body>
+          </html>
+        `;
+    
+        zip.file(`${page.get('name')}.html`, pageHTML);
+        css.file(`${page.get('name')}.css`, pageCSS);
       });
+    
+      zip.generateAsync({ type: "blob" })
+        .then(function (content) {
+          saveAs(content, "website.zip");
+          // Success alert with a 3-second timer
+          Swal.fire({
+            title: "Success",
+            text: "Website files successfully zipped!",
+            icon: "success",
+            timer: 3000,
+            showConfirmButton: false
+          });
+        })
+        .catch(function (error) {
+          // Error alert
+          Swal.fire({
+            title: "Error",
+            text: "An error occurred while generating the zip file.",
+            icon: "error"
+          });
+          console.error("Error generating zip file:", error);
+        });
+    } catch (error) {
+      // Catch any synchronous errors
+      Swal.fire({
+        title: "Error",
+        text: "An error occurred while processing the pages.",
+        icon: "error"
+      });
+      console.error("Error processing pages:", error);
+    }
+    
   }
   
   // Function to add a click event listener to the export button
@@ -112,7 +137,24 @@
           return pm.select(pageId);
         },
         removePage(pageId) {
-          return pm.remove(pageId);
+          Swal.fire({
+            title: 'Are you sure?',
+            text: 'You are about to remove the page. This action cannot be undone.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, remove it!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire(
+                'Removed!',
+                'The page has been removed.',
+                'success'
+              );
+              return pm.remove(pageId);
+            }
+          });
         },
         addPage() {
           const len = pm.getAll().length;

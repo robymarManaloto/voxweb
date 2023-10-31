@@ -14,6 +14,7 @@ function addVoiceListener(editor) {
     .then(() => voxListen(recognition))
     .then(() => {
       console.log(transcription);
+      speak("The system is now processing your changes. Please wait patiently.");
       const pages = editor.Pages;
       const page = pages.getSelected();
       const component = page.getMainComponent();
@@ -34,6 +35,8 @@ function listenVoice(listener) {
         if (listening_vox.includes('box') || listening_vox.includes('vox')) {
           listener.stop();
           isRecog = false;
+          speak("I'm now listening to changes for the current page.");
+          heardYou();
           resolve();
         }
       };
@@ -76,6 +79,7 @@ function voxListen(recognition) {
 
 function changePage(html, transcript, editor) {
   const csrftoken = $('[name=csrfmiddlewaretoken]').val();
+  askvox.innerHTML = '<lord-icon src="https://cdn.lordicon.com/twemlvxy.json" trigger="loop"  state="loop-cycle" colors="primary:#ffffff" style="width:30px;height:30px; margin-bottom:-8px;"></lord-icon> Generating...';
   $.ajax({
     url: '/editor/regenerate_page/',
     type: 'POST',
@@ -95,6 +99,8 @@ function changePage(html, transcript, editor) {
           component: data['component'],
           styles: data['styles'],
         });
+        speak("Your changes on "+page.get('name')+" page have been processed successfully.");
+        askvox.innerHTML = '<lord-icon src="https://cdn.lordicon.com/rhprarly.json" trigger="loop" colors="primary:#ffffff,secondary:#ffffff" style="width:30px;height:30px; margin-bottom:-8px;"></lord-icon> Ask Vox, they say!';
       } catch (err) {
         console.error(err);
       }
@@ -102,5 +108,24 @@ function changePage(html, transcript, editor) {
     error: function (xhr, status, error) {
       console.error(error);
     },
+  });
+}
+
+function heardYou(){
+  Swal.fire({
+    title: "Listening...",
+    icon: 'info',
+    html: '<p style="color:white;">This is a voice assistant style alert!</p> <lord-icon src="https://cdn.lordicon.com/xumlwjxf.json" trigger="loop" colors="primary:#DAFFFB,secondary:#dafffb,tertiary:#64ccc5" style="width:250px;height:250px"> </lord-icon>',
+    showCancelButton: false,
+    confirmButtonColor: '#FF4747',
+    confirmButtonText: '<i class="fas fa-stop"></i> Stop',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    background: '#04364A',
+    customClass: {
+      confirmButton: 'swal-button'
+    }
+  }).then((result) => {
+    recognition.stop();
   });
 }

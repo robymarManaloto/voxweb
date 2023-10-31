@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact - Mystic Moonlight</title>
+  <title>Mystic Moonlight Blog</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
@@ -12,14 +12,40 @@
       color: #FFFFFF;
     }
 
-    .accent-color {
+    .navbar {
+      background-color: #000000;
+    }
+
+    .navbar-brand {
+      color: #FFFFFF;
+    }
+
+    .navbar-nav .nav-link {
+      color: #FFFFFF;
+    }
+
+    .jumbotron {
+      background-color: #000000;
+      color: #FFFFFF;
+    }
+
+    .card {
+      background-color: #000000;
+      color: #FFFFFF;
+    }
+
+    .card-title {
       color: #FFC300;
+    }
+
+    .card-text {
+      color: #FFFFFF;
     }
   </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="index.html">Mystic Moonlight</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,13 +59,13 @@
         <li class="nav-item">
           <a class="nav-link" href="about.html">About</a>
         </li>
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" href="contact.html">Contact</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="services.html">Services</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" href="blog.html">Blog</a>
         </li>
         <li class="nav-item">
@@ -55,36 +81,39 @@
     </div>
   </nav>
 
-  <div class="container mt-5">
-    <h1 class="text-center">Contact Us</h1>
-    <div class="row mt-5">
+  <div class="jumbotron text-center">
+    <h1>Welcome to the Mystic Moonlight Blog</h1>
+    <p>Explore the mystical world through our blog posts</p>
+  </div>
+
+  <div class="container">
+    <div class="row">
       <div class="col-md-6">
-        <img src="https://picsum.photos/400/300" class="img-fluid" alt="Contact Image">
+        <div class="card mb-4">
+          <img src="https://picsum.photos/500/300" class="card-img-top" alt="Blog Post Image">
+          <div class="card-body">
+            <h5 class="card-title">Unveiling the Secrets of the Mystic Moon</h5>
+            <p class="card-text">Discover the hidden meanings behind the phases of the moon and its influence on our lives.</p>
+            <a href="#" class="btn btn-primary">Read More</a>
+          </div>
+        </div>
       </div>
       <div class="col-md-6">
-        <form>
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Enter your name">
+        <div class="card mb-4">
+          <img src="https://picsum.photos/500/300" class="card-img-top" alt="Blog Post Image">
+          <div class="card-body">
+            <h5 class="card-title">Harnessing the Power of Crystals</h5>
+            <p class="card-text">Learn how crystals can enhance your spiritual journey and bring positive energy into your life.</p>
+            <a href="#" class="btn btn-primary">Read More</a>
           </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="Enter your email">
-          </div>
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea class="form-control" id="message" rows="5" placeholder="Enter your message"></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-      </div>
-    </div>
-    <div class="row mt-5">
-      <div class="col-md-12 text-center">
-        <p><strong>Need more information?</strong> Email <a href="mailto:support@chatbase.co" class="accent-color">support@chatbase.co</a> for more info.</p>
+        </div>
       </div>
     </div>
   </div>
+
+  <footer class="text-center mt-5">
+    <p>&copy; 2021 Mystic Moonlight. All rights reserved.</p>
+  </footer>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
