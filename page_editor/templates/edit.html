@@ -6,8 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VoxWeb - Website Editor</title>
-    <style>
-    </style>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"/>
@@ -26,6 +25,10 @@
         align-items: center; /* Center vertically */
       }
       
+      .left-content{
+        align-items: center; /* Center vertically */
+      }
+
       .topbar button {
         background: none;
         border: none;
@@ -136,11 +139,10 @@
           trigger="hover"
           stroke="bold"
           colors="primary:#ffffff,secondary:#08a88a"
-          style="width:30px;height:30px">
+          style="width:30px;height:30px; margin-bottom:-10px;">
       </lord-icon>
         </button>
-
-        <img src="logo.png" alt="Logo">
+        <img src="/static/logo.png" height="50px" alt="Logo">
       </div>
       <div class="right-content">
         <button id="askvox"><lord-icon
@@ -153,8 +155,6 @@
         <button id="export-btn"><i class="fas fa-download"></i> Export to ZIP</button>
       </div>
     </div>
-  
-
     <div class="app-wrap">
         
         <div class="pages-wrp">
