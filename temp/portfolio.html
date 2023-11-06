@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      color: #343a40;
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+      background-color: #6c63ff;
+      color: #ffffff;
+    }
+
+    .navbar .nav-link:hover {
+      color: #ff5733;
+    }
+
+    .jumbotron {
+      background-color: #ff5733;
+      color: #ffffff;
+      margin-bottom: 0;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #ffffff;
+    }
+
+    .card {
+      margin-bottom: 30px;
+    }
+  </style>
+  <title>My Portfolio</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">My Portfolio</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="services.html">Services</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="portfolio.html">Portfolio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="jumbotron text-center">
+    <h1>Welcome to My Portfolio</h1>
+    <p class="lead">Check out my amazing projects</p>
+  </header>
+
+  <section class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <img src="https://picsum.photos/300/200" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">Project 1</h5>
+            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam accumsan metus est, et consequat
+              tellus bibendum id.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <img src="https://picsum.photos/300/200" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">Project 2</h5>
+            <p class="card-text">Aliquam erat volutpat. In eget leo cursus, maximus neque ac, ornare quam. Integer ut consequat arcu.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <img src="https://picsum.photos/300/200" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">Project 3</h5>
+            <p class="card-text">Proin aliquam arcu in tellus ullamcorper, non cursus diam porttitor. Nulla facilisi. Sed interdum nulla
+              at ornare dapibus.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

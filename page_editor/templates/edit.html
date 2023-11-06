@@ -16,6 +16,7 @@
     <link href="/static/loader.css" rel="stylesheet">
 
     <style>
+      
       .topbar {
         background: linear-gradient(to right, #04364A, #176B87);
         color: #F5FCCD;
@@ -110,10 +111,29 @@
   
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.lordicon.com/lordicon-1.1.0.js"></script>
     <script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
-</head>
+        
+    <!-- Load Bootstrap JS from UNPKG -->
+    <script src="https://unpkg.com/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Load GrapeJS and its plugins from UNPKG -->
+    <script src="https://unpkg.com/grapesjs"></script>
+    <script src="https://unpkg.com/grapesjs-preset-webpage"></script>
+    <script src="https://unpkg.com/grapesjs-blocks-basic"></script>
+    <script src="https://unpkg.com/grapesjs-plugin-forms"></script>
+
+    
+    <!-- Load additional GrapeJS plugins -->
+    <script src="https://unpkg.com/grapesjs-plugin-export"></script>
+    <script src="https://unpkg.com/grapesjs-style-bg"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
 <body>
   <div id="loading" class="loading">
   <div class="loading-container">
@@ -165,7 +185,7 @@
           <div class="pages">
             <div v-for="page in pages" :key="page.id" :class="{page: 1, selected: isSelected(page) }" @click="selectPage(page.id)">
               <i class="fas fa-code"></i>
-              [[ page.get('name') || page.id ]] <span v-if="!isSelected(page)" @click="removePage(page.id)" class="page-close"><lord-icon
+              <span @click="editPageName(page)">[[ page.get('name') || page.id ]]</span> <span v-if="!isSelected(page)" @click="removePage(page.id)" class="page-close"><lord-icon
     src="https://cdn.lordicon.com/drxwpfop.json"
     trigger="hover"
     colors="primary:#ffffff,secondary:#64ccc5"
@@ -192,25 +212,6 @@
 
       </div>
     </div>
-
-    
-    <!-- Load Bootstrap JS from UNPKG -->
-    <script src="https://unpkg.com/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Load GrapeJS and its plugins from UNPKG -->
-    <script src="https://unpkg.com/grapesjs"></script>
-    <script src="https://unpkg.com/grapesjs-preset-webpage"></script>
-    <script src="https://unpkg.com/grapesjs-blocks-basic"></script>
-    <script src="https://unpkg.com/grapesjs-plugin-forms"></script>
-
-    
-    <!-- Load additional GrapeJS plugins -->
-    <script src="https://unpkg.com/grapesjs-plugin-export"></script>
-    <script src="https://unpkg.com/grapesjs-style-bg"></script>
-    
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
 
 </body>
 </html>

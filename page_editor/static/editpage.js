@@ -158,9 +158,41 @@
         },
         addPage() {
           const len = pm.getAll().length;
-          pm.add({
-            name: `Page ${len + 1}`,
-            component: '<div>New page</div>',
+        
+          Swal.fire({
+            title: 'Enter Page Name',
+            input: 'text',
+            inputPlaceholder: `Give me name for Page ${len + 1}`,
+            showCancelButton: true,
+            confirmButtonText: 'Create Page',
+            showLoaderOnConfirm: true,
+            preConfirm: (name) => {
+              if (!name) {
+                Swal.showValidationMessage('Page name cannot be empty');
+              } else {
+                pm.add({
+                  name,
+                  component: '<div>New page</div>',
+                });
+              }
+            },
+          });
+        },
+        editPageName(page) {
+          Swal.fire({
+            title: 'Edit Page Name',
+            input: 'text',
+            inputValue: page.get('name') || '',
+            showCancelButton: true,
+            inputValidator: (value) => {
+              if (!value) {
+                return 'Name cannot be empty';
+              }
+            },
+          }).then((result) => {
+            if (result.value) {
+              page.set('name', result.value);
+            }
           });
         },
       }

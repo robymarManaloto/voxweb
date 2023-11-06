@@ -189,9 +189,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
     denyButtonText: `Deny`,
   }).then((result) => {
     if (result.isDenied) {
-      Swal.fire('Microphone Denied', '', 'error').then(() => {
-        window.location.href = 'https://example.com';
-      });
+      Swal.fire({
+        title: 'Microphone Denied',
+        icon: 'error',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+      });      
     } else {
       speak('"Hello there! I\'m Vox. Thanks for reaching out. To begin creating your website, click the button or simply say \'Vox\'."');
     }
