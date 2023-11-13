@@ -1,7 +1,8 @@
+django
 requests
 pycryptodome
 curl_cffi
-aiohttp
+aiohttp==3.9.0b0
 certifi
 browser_cookie3
 websockets
@@ -16,5 +17,7 @@ waitress
 werkzeug
 loguru
 tiktoken
+pillow
+platformdirs
+numpy
 g4f
-django

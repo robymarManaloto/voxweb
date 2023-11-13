@@ -15,7 +15,7 @@ Welcome to the README for your Django application! This document is designed to 
 
 ## Project Overview
 
-VoxWeb: A Speech-Enabled Automatic Website Building System  is a software solution designed to simplify and streamline the process of creating web pages through voice recognition technology.
+VoxWeb: A Speech-Enabled Automatic Website Building System is a software solution designed to simplify and streamline the process of creating web pages through voice recognition technology.
 
 ## Getting Started
 
@@ -29,6 +29,8 @@ List the software and tools that users need to have installed before they can ru
 - Django
 - Virtual environment (recommended)
 - Any other dependencies
+- [Rust compiler toolchain](https://rustup.rs/) - Required for specific functionalities
+- [Desktop Development with C++ in Visual Studio](https://visualstudio.microsoft.com/visual-cpp-build-tools/) - Required for specific functionalities
 
 ### Installation
 
