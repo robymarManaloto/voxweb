@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'voice_recognition',
     'page_editor',
+    'login_dashboard',
 ]
 
 MIDDLEWARE = [

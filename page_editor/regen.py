@@ -15,15 +15,15 @@ def generate(transcript, curr_html):
 # Define a function to parse HTML content from a response
 def parse_html(html_string):
     # Extracting component and styles using regex
-    component_pattern = r'<body>(.*?)</body>'
-    styles_pattern = r'<style>(.*?)</style>'
+    component_pattern = r'<body>(.*?)<\/body>'
+    styles_pattern = r'<style>(.*?)<\/style>'
     component_match = re.search(component_pattern, html_string, re.DOTALL)
     styles_match = re.search(styles_pattern, html_string, re.DOTALL)
 
     # Construct the response dictionary
     result = {
-        "component": component_match.group(1).strip() if component_match else "",
-        "styles": styles_match.group(1).strip() if styles_match else ""
+        "component": component_match.group(1).strip() if component_match else None,
+        "styles": styles_match.group(1).strip() if styles_match else None
     }
     
     return result
@@ -38,7 +38,7 @@ def generate_page(web_context, curr_html):
         messages=[{"role": "user", "content": content}],
     )
     website = parse_html(response)
-    if website["component"] == '' and website["styles"] == '':
+    if website["component"] == None and website["styles"] == None:
         return generate_page(web_context, curr_html)  # Retry if HTML parsing fails
     else:
         return website

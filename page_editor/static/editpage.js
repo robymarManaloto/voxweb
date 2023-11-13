@@ -32,12 +32,14 @@
       },
       canvas: {
         styles: [
-          'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'
+          'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css',
+          'https://use.fontawesome.com/releases/v5.15.4/css/all.css'
         ],
         scripts: [
           'https://code.jquery.com/jquery-3.5.1.slim.min.js',
           'https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js',
-          'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'
+          'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js',
+          'https://use.fontawesome.com/releases/v5.15.4/js/all.js'
         ],
       },
     });
@@ -162,7 +164,7 @@
           Swal.fire({
             title: 'Enter Page Name',
             input: 'text',
-            inputPlaceholder: `Give me name for Page ${len + 1}`,
+            inputPlaceholder: `Give me a name for Page ${len + 1}`,
             showCancelButton: true,
             confirmButtonText: 'Create Page',
             showLoaderOnConfirm: true,

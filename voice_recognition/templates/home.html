@@ -64,25 +64,5 @@
         speed: 0.05,
         amplitude: 0.8,
       });
-
-      document.addEventListener('DOMContentLoaded', () => {
-        // Check if the microphone is available
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            // Microphone not detected, show SweetAlert
-            loader.style.display = "none";
-            Swal.fire({
-                title: 'Microphone Not Detected',
-                text: 'Please make sure your microphone is connected and try again.',
-                icon: 'error',
-                confirmButtonText: 'Go Back',
-                allowOutsideClick: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // User clicked "Go Back", navigate back
-                    window.history.back();
-                }
-            });
-        }
-    });
 </script>
 {% include 'include/footer.html' %}

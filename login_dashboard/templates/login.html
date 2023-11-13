@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoxWeb - Login</title>
+    <link rel="icon" type="image/x-icon" href="/static/voice_recognition/favicon.png">
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"/>
+    <script src="https://cdn.lordicon.com/lordicon-1.1.0.js"></script>
+    <link rel="stylesheet" href="/static/background.css">
+    <link rel="stylesheet" href="/static/login.css">    
+</head>
+<body>
+  <section>
+    <div class="container">
+      <div class="user signinBx">
+        <div class="imgBx"><img src="https://raw.githubusercontent.com/WoojinFive/CSS_Playground/master/Responsive%20Login%20and%20Registration%20Form/img1.jpg" alt="" /></div>
+        <div class="formBx">
+            <form action="">
+              <div class="text-center mb-4">
+                <!-- Your logo goes here -->
+                <h1>Sign In</h1>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="username" placeholder="Username" />
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control" name="password" placeholder="Password" />
+              </div>
+              <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Login" />
+              </div>
+              <p class="text-center">
+                Don't have an account? <a href="#" onclick="toggleForm();">Sign Up.</a>
+              </p>
+            </form>
+        </div>
+      </div>
+      <div class="user signupBx">
+        <div class="formBx">
+          <form action="" onsubmit="return false;">
+            <h2>Create an account</h2>
+            <input type="text" name="" placeholder="Username" />
+            <input type="email" name="" placeholder="Email Address" />
+            <input type="password" name="" placeholder="Create Password" />
+            <input type="password" name="" placeholder="Confirm Password" />
+            <input type="submit" name="" value="Sign Up" />
+            <p class="signup">
+              Already have an account ?
+              <a href="#" onclick="toggleForm();">Sign in.</a>
+            </p>
+          </form>
+        </div>
+        <div class="imgBx"><img src="https://raw.githubusercontent.com/WoojinFive/CSS_Playground/master/Responsive%20Login%20and%20Registration%20Form/img2.jpg" alt="" /></div>
+      </div>
+    </div>
+  </section>
+
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+</body>
+<script src="/static/typing.js"></script>
+<script>
+  const toggleForm = () => {
+    const container = document.querySelector('.container');
+    container.classList.toggle('active');
+  };
+</script>

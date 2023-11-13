@@ -2,14 +2,24 @@ const loaderContainer = document.getElementById('loaderContainer');
 const startBtn = document.getElementById("startBtn");
 const output = document.getElementById("output");
 const form = document.getElementById("transcript");
+
+// Initialize the speech recognition
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
 const listener = new SpeechRecognition();
 let isRecognitionStarted = false;
+
+
+// Change the text when speech recognition is on or not.
 const listeningText = document.getElementById("listening-text");
 const firstText = document.getElementById("first-text");
 
-initialize();
+// The transcript should be looped and recognize filipino words
+recognition.continuous = true;
+recognition.lang = "fil-PH";
+
+// Initilize listener of 'Vox'
+restartRecognition();
 
 listener.onresult = function (event) {
   const listeningVox = event.results[0][0].transcript.toLowerCase();
@@ -25,9 +35,6 @@ listener.onend = function () {
     listener.start();
   }
 };
-
-recognition.continuous = true;
-recognition.lang = "fil-PH";
 
 recognition.onstart = function () {
     listeningText.style.display = "block";
@@ -47,13 +54,13 @@ recognition.onstart = function () {
 recognition.onresult = function (event) {
   const result = event.results[0][0].transcript;
   processTranscript(result);
-  console.log(result);
 };
 
 recognition.onend = function () {
   restartRecognition();
 };
 
+// Change icon if started or not
 startBtn.addEventListener("click", function () {
   if (!isRecognitionStarted) {
     listener.stop();
@@ -81,6 +88,7 @@ startBtn.addEventListener("click", function () {
   }
 });
 
+// Make transition to button
 function animateButtonContent(htmlContent, button) {
     startBtn.style.opacity = 0;
     startBtn.addEventListener('transitionend', () => {
@@ -88,10 +96,6 @@ function animateButtonContent(htmlContent, button) {
         startBtn.style.opacity = 1;
     });
     startBtn.style.transition = 'opacity 0.5s ease-in-out';
-}
-
-function initialize() {
-  restartRecognition();
 }
 
 function restartRecognition() {
@@ -102,14 +106,27 @@ function restartRecognition() {
   firstText.style.display =  "block";
 }
 
+// Check if transcript is enough
 function processTranscript(transcript) {
-  if (transcript.length > 10) {
+  if (transcript.length > 100) {
     confirmTranscript(transcript);
   } else {
     notEnoughInfo();
   }
 }
 
+// Send alert if the info is not enough
+function notEnoughInfo() {
+  speak("I'm sorry, but it seems like you didn't provide enough information for me to assist you effectively. Can you please provide more details?");
+  Swal.fire({
+    icon: 'warning',
+    title: 'Not Enough Information!',
+    text: 'Sorry, there is not enough information provided to create the website. Please provide more details.',
+    confirmButtonText: 'Okay'
+  });
+}
+
+// Send transcript to process if confirmed
 function confirmTranscript(transcription) {
   Swal.fire({
     title: 'Are you sure?',
@@ -129,16 +146,7 @@ function confirmTranscript(transcription) {
   });
 }
 
-function notEnoughInfo() {
-  speak("I'm sorry, but it seems like you didn't provide enough information for me to assist you effectively. Can you please provide more details?");
-  Swal.fire({
-    icon: 'warning',
-    title: 'Not Enough Information!',
-    text: 'Sorry, there is not enough information provided to create the website. Please provide more details.',
-    confirmButtonText: 'Okay'
-  });
-}
-
+// Generate the files needed, go to editor if finished
 function sendTranscript(transcription) {
   var csrftoken = $("[name=csrfmiddlewaretoken]").val();
   $.ajax({
@@ -173,34 +181,54 @@ function sendTranscript(transcription) {
   });
 }
 
+// Check microphone to use the speech synthesis
 document.addEventListener('DOMContentLoaded', (event) => {
-  const microphoneIcon = document.createElement('i');
-  microphoneIcon.classList.add('fas', 'fa-microphone');
-  const microphoneLabel = document.createElement('span');
-  microphoneLabel.textContent = ' Microphone Check';
-  const titleContainer = document.createElement('div');
-  titleContainer.appendChild(microphoneIcon);
-  titleContainer.appendChild(microphoneLabel);
-
-  Swal.fire({
-    title: titleContainer,
-    text: 'Please allow access to your microphone to continue.',
-    showDenyButton: true,
-    denyButtonText: `Deny`,
-  }).then((result) => {
-    if (result.isDenied) {
-      Swal.fire({
-        title: 'Microphone Denied',
+   // Check if the microphone is available
+   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    // Microphone not detected, show SweetAlert
+    loader.style.display = "none";
+    Swal.fire({
+        title: 'Microphone Not Detected',
+        text: 'Please make sure your microphone is connected and try again.',
         icon: 'error',
-        showConfirmButton: false,
-        allowOutsideClick: false,
-      });      
-    } else {
-      speak('"Hello there! I\'m Vox. Thanks for reaching out. To begin creating your website, click the button or simply say \'Vox\'."');
-    }
-  });
+        confirmButtonText: 'Go Back',
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // User clicked "Go Back", navigate back
+            window.history.back();
+        }
+    });
+  }else{
+    const microphoneIcon = document.createElement('i');
+    microphoneIcon.classList.add('fas', 'fa-microphone');
+    const microphoneLabel = document.createElement('span');
+    microphoneLabel.textContent = ' Microphone Check';
+    const titleContainer = document.createElement('div');
+    titleContainer.appendChild(microphoneIcon);
+    titleContainer.appendChild(microphoneLabel);
+  
+    Swal.fire({
+      title: titleContainer,
+      text: 'Please allow access to your microphone to continue.',
+      showDenyButton: true,
+      denyButtonText: `Deny`,
+    }).then((result) => {
+      if (result.isDenied) {
+        Swal.fire({
+          title: 'Microphone Denied',
+          icon: 'error',
+          showConfirmButton: false,
+          allowOutsideClick: false,
+        });      
+      } else {
+        speak('"Hello there! I\'m Vox. Thanks for reaching out. To begin creating your website, click the button or simply say \'Vox\'."');
+      }
+    });
+  }
 });
 
+// Speech Synthesis
 function speak(text) {
   const message = new SpeechSynthesisUtterance(text);
   const voices = window.speechSynthesis.getVoices();
@@ -209,6 +237,7 @@ function speak(text) {
   window.speechSynthesis.speak(message);
 }
 
+// Start first to change the voice
 window.speechSynthesis.onvoiceschanged = () => {
   speak("Please allow access to your microphone to continue.");
 };
