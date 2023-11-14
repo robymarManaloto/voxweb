@@ -13,7 +13,13 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"/>
     <link rel="stylesheet" href="/static/background.css">
     <link rel="stylesheet" href="/static/login.css">    
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.15/dark.min.css" rel="stylesheet">
+    <style>
+    .swal2-popup {
+      background: linear-gradient(45deg, #176B87, #04364A);
+    }
+    </style>
     <script src="https://cdn.lordicon.com/lordicon-1.1.0.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   </head>
@@ -92,7 +98,7 @@ $(document).ready(function () {
         e.preventDefault();
         $.ajax({
             type: 'POST',
-            url: '/login/',
+            url: '',
             headers: {
                 'X-CSRFToken': $('[name=csrf-token]').attr('content')
             },
@@ -121,7 +127,17 @@ $(document).ready(function () {
             success: function (data) {
                 if (data.success) {
                     // Redirect to the login page on successful registration
-                    window.location.href = '/login/';
+                        Swal.fire({
+                        icon: 'success',
+                        title: 'Registration Successful',
+                        text: 'You have been successfully registered!',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        // Redirect to the login page on popup confirmation
+                        if (result.isConfirmed || result.isDismissed) {
+                            window.location.href = '/';
+                        }
+                    });
                 } else {
                     // Display error messages using Bootstrap validation
                     displayValidationErrors('register-form', data.message);

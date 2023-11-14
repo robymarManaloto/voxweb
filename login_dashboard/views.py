@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password, check_password
 from .models import UserProfile
+from .models import Project
 from .forms import RegistrationForm
 from django.shortcuts import redirect
+from django.shortcuts import render, get_object_or_404
 
 def login(request):
     if request.method == 'POST':
@@ -67,12 +69,15 @@ def register(request):
 
 def dashboard(request):
     if 'username' not in request.session:
-        return redirect('login')
+        return redirect('/')
 
     username = request.session['username']
     
-    return render(request, 'dashboard.html')
+    # Retrieve projects for the logged-in user
+    user_projects = Project.objects.filter(user__username=username)
 
+
+    return render(request, 'dashboard.html', {'username': username, 'projects': user_projects})
 
 def logout(request):
     if request.method == 'POST':
@@ -121,3 +126,25 @@ def delete_account(request):
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})
+
+
+def create_project(request):
+    if request.method == 'POST':
+        project_name = request.POST.get('project_name')
+        username = request.session['username']
+        user = UserProfile.objects.get(username=username)
+        
+        Project.objects.create(user=user, name=project_name)
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid request method'})
+    
+def delete_project(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    
+    if request.method == 'POST':
+        project_name = project.name
+        project.delete()
+        return JsonResponse({'status': 'success', 'message': f'{project_name} has been deleted.'})
+    
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
