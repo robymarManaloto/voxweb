@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token }}">
   <title>Project Dashboard</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
@@ -88,7 +89,7 @@
             <i class="fas fa-user-circle"></i> Profile
           </a>
           <div class="dropdown-menu" aria-labelledby="profileDropdown">
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" href="#" id="changePasswordBtn">
               <i class="fas fa-key"></i> Change Password
             </a>
             <a class="dropdown-item" href="#" onclick="deleteAccount()">
@@ -123,7 +124,7 @@
       <div class="placeholder-text" id="placeholderText" style="display: none;">No projects available.</div>
     </div>
   </div>
-
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script>
     // Function to show SweetAlert for project deletion
     function showDeleteAlert(projectName) {
@@ -146,27 +147,6 @@
       });
     }
 
-    // Function to show SweetAlert for account deletion
-    function deleteAccount() {
-      Swal.fire({
-        title: 'Delete Account?',
-        text: 'Are you sure you want to delete your account? This action cannot be undone.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete it!'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire(
-            'Account Deleted!',
-            'Your account has been successfully deleted.',
-            'success'
-          );
-        }
-      });
-    }
-
     // Function to show SweetAlert for logout
     function logout() {
       Swal.fire({
@@ -179,15 +159,141 @@
         confirmButtonText: 'Yes, logout'
       }).then((result) => {
         if (result.isConfirmed) {
-          Swal.fire(
-            'Logged Out',
-            'You have been successfully logged out.',
-            'success'
-          );
-          // Add logic for actual logout here
+              $.ajax({
+                type: 'POST',
+                url: '/logout/',
+                headers: {
+                  'X-CSRFToken': $('[name=csrf-token]').attr('content')
+                },
+                success: function (data) {
+                    if (data.success) {
+                        Swal.fire(
+                          'Logged Out',
+                          'You have been successfully logged out.',
+                          'success'
+                      ).then(() => {
+                          setTimeout(() => {
+                              window.location.href = '/login/';
+                          }, 0); // You can adjust the timeout value if needed
+                      });                    
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            'Failed to logout. Please try again.',
+                            'error'
+                        );
+                    }
+                },
+                error: function () {
+                    Swal.fire(
+                        'Error',
+                        'Failed to logout. Please try again.',
+                        'error'
+                    );
+                }
+            });
         }
       });
     }
+    
+  // Function to show SweetAlert for password change
+  function showChangePasswordAlert() {
+    Swal.fire({
+      title: 'Change Password',
+      html:
+        '<input type="password" id="oldPassword" class="swal2-input" placeholder="Old Password">' +
+        '<input type="password" id="newPassword" class="swal2-input" placeholder="New Password">' +
+        '<input type="password" id="confirmPassword" class="swal2-input" placeholder="Confirm Password">',
+      showCancelButton: true,
+      confirmButtonText: 'Change Password',
+      cancelButtonText: 'Cancel',
+      showLoaderOnConfirm: true,
+      preConfirm: () => {
+        const oldPassword = $('#oldPassword').val();
+        const newPassword = $('#newPassword').val();
+        const confirmPassword = $('#confirmPassword').val();
+        // Perform AJAX request to change password
+        return $.ajax({
+          type: 'POST',
+          url: '/change_password/',
+          headers: {
+            'X-CSRFToken': $('[name=csrf-token]').attr('content')
+          },
+          data: {
+            old_password: oldPassword,
+            new_password: newPassword,
+            confirm_password: confirmPassword,
+          },
+        });
+      },
+      allowOutsideClick: () => !Swal.isLoading(),
+    }).then((result) => {
+      if (result.isConfirmed && result.value.success) {
+        Swal.fire('Password Changed!', 'Your password has been successfully changed.', 'success')
+          .then(() => {
+            setTimeout(() => {
+                window.location.href = '/login/';
+            }, 0); // You can adjust the timeout value if needed
+        });
+      } else if (result.isConfirmed) {
+        Swal.fire('Error', 'Failed to change password. Please try again.', 'error');
+      }
+    });
+  }
+
+  // Attach click event to the "Change Password" button
+  $('#changePasswordBtn').on('click', function () {
+    showChangePasswordAlert();
+  });
+
+  function deleteAccount() {
+    Swal.fire({
+      title: 'Delete Account?',
+      text: 'Are you sure you want to delete your account? This action cannot be undone.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: 'POST',
+          url: '/delete_account/',
+          headers: {
+            'X-CSRFToken': $('[name=csrf-token]').attr('content')
+          },
+          success: function (data) {
+            if (data.success) {
+              Swal.fire(
+                'Account Deleted!',
+                'Your account has been successfully deleted.',
+                'success'
+              ).then(() => {
+                setTimeout(() => {
+                  window.location.href = '/login/';
+                }, 0);
+              });
+            } else {
+              Swal.fire(
+                'Error',
+                'Failed to delete account. Please try again.',
+                'error'
+              );
+            }
+          },
+          error: function () {
+            Swal.fire(
+              'Error',
+              'Failed to delete account. Please try again.',
+              'error'
+            );
+          }
+        });
+      }
+    });
+  }
+
   </script>
   
 </body>

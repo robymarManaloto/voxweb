@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <title>VoxWeb - Login</title>
     <link rel="icon" type="image/x-icon" href="/static/voice_recognition/favicon.png">
     <!-- Include Bootstrap CSS -->
@@ -23,9 +24,8 @@
             <div class="imgBx"><img src="/static/backdrop1.jpg" alt="" /></div>
             <div class="formBx">
                 <form id="login-form" method="post">
-                    {% csrf_token %}
                     <div class="text-center mb-4">
-                        <img src="/static/logo.png" height="60px" style="margin-bottom: 2em;">
+                        <img src="/static/logo_2.png" height="60px" style="margin-bottom: 2em;">
                         <h1>Sign In</h1>
                     </div>
                     <div class="form-group">
@@ -34,7 +34,7 @@
                     <div class="form-group">
                         <input type="password" class="form-control" name="password" placeholder="Password" />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group text-right">
                         <input type="submit" class="btn btn-primary" value="Login" />
                     </div>
                     <p class="text-center">
@@ -46,7 +46,6 @@
         <div class="user signupBx">
             <div class="formBx">
                 <form id="register-form" method="post">
-                    {% csrf_token %}
                     <h1>Create an account</h1>
                     <div class="form-group">
                         <input type="text" class="form-control" name="username" placeholder="Username" />
@@ -94,6 +93,9 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: '/login/',
+            headers: {
+                'X-CSRFToken': $('[name=csrf-token]').attr('content')
+            },
             data: $(this).serialize(),
             success: function (data) {
                 if (data.success) {
@@ -112,6 +114,9 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: '/register/',
+            headers: {
+                'X-CSRFToken': $('[name=csrf-token]').attr('content')
+            },
             data: $(this).serialize(),
             success: function (data) {
                 if (data.success) {
@@ -120,7 +125,6 @@ $(document).ready(function () {
                 } else {
                     // Display error messages using Bootstrap validation
                     displayValidationErrors('register-form', data.message);
-                    console.log(data.message);
                 }
             }
         });
