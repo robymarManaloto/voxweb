@@ -6,23 +6,28 @@
       <div class="left-content">
         <!-- Logo goes here -->
         <button id="back-button" style="padding:0.3em;">
-        <lord-icon
-          src="https://cdn.lordicon.com/eavayqgw.json"
-          trigger="hover"
-          stroke="bold"
-          colors="primary:#ffffff,secondary:#08a88a"
-          style="width:30px;height:30px; margin-bottom:-10px;">
-      </lord-icon>
+          <lord-icon
+            src="https://cdn.lordicon.com/eavayqgw.json"
+            trigger="hover"
+            stroke="bold"
+            colors="primary:#ffffff,secondary:#08a88a"
+            style="width:30px;height:30px; margin-bottom:-10px;">
+          </lord-icon>
         </button>
         <img src="{% static 'page_editor/logo.png' %}" height="40px" alt="Logo">
       </div>
       <div class="right-content">
-        <button id="askvox"><lord-icon
-          src="https://cdn.lordicon.com/rhprarly.json"
-          trigger="loop"
-          colors="primary:#ffffff,secondary:#ffffff"
-          style="width:30px;height:30px; margin-bottom:-8px;">
-      </lord-icon> Ask Vox, they say!</button>
+        <button id="save-btn">Save</button>
+
+        <button id="askvox">
+          <lord-icon
+            src="https://cdn.lordicon.com/rhprarly.json"
+            trigger="loop"
+            colors="primary:#ffffff,secondary:#ffffff"
+            style="width:30px;height:30px; margin-bottom:-8px;">
+          </lord-icon> Ask Vox, they say!
+        </button>
+
         <button id="stop-btn" style="display: none;"><i class="fas fa-stop"></i> Stop</button>
         <button id="export-btn"><i class="fas fa-download"></i> Export to ZIP</button>
       </div>

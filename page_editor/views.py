@@ -70,3 +70,35 @@ def remove_page(request, page_id):
         return JsonResponse({'success': True})
     except Page.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Page does not exist'})
+
+def create_page(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+
+        # Create a new page in the database
+        new_page = Page.objects.create(
+            project_id=project,
+            title=name+'.html',
+            content="""
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>About Us - Welcome to our Agricultural Website</title>
+                <style>
+                </style>
+                </head>
+                <body>
+                    <div>New Page</div>
+                </body>
+                </html>
+            """,
+        )
+
+        # Return the new page ID in the response
+        response_data = {'page_id': new_page.id}
+        return JsonResponse(response_data)
+
+    # Handle other HTTP methods or invalid requests as needed
+    return JsonResponse({'error': 'Invalid request'})

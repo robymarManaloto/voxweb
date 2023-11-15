@@ -109,6 +109,16 @@
     }
     
   }
+
+  function savePages(editor) {
+    const pages = editor.Pages;
+    const allPages = pages.getAll();
+  }
+
+  function addSaveButtonListener(editor) {
+    const exportBtn = document.getElementById('save-btn');
+    exportBtn.addEventListener('click', () => savePages(editor));
+  }
   
   // Function to add a click event listener to the export button
   function addExportButtonListener(editor) {
@@ -183,7 +193,6 @@
         },
         addPage() {
           const len = pm.getAll().length;
-        
           Swal.fire({
             title: 'Enter Page Name',
             input: 'text',
@@ -195,15 +204,33 @@
               if (!name) {
                 Swal.showValidationMessage('Page name cannot be empty');
               } else {
-                pm.add({
-                  name,
-                  component: '<div>New page</div>',
+                // Make an Ajax request to create a new page
+                $.ajax({
+                  url: '/create_page/',  // Replace with your actual URL
+                  method: 'POST',
+                  data: {
+                    name: name,
+                  },
+                  headers: {
+                    'X-CSRFToken': $('[name=csrf-token]').attr('content'),
+                  },
+                  success: (response) => {
+                    // Update pm object with the new page ID
+                    pm.add({
+                      id: response.page_id,  // Assuming your response contains the new page ID
+                      name,
+                      component: '<div>New page</div>',
+                    });
+                  },
+                  error: (error) => {
+                    console.error('Error creating page:', error);
+                  },
                 });
               }
             },
           });
-          
-        },
+        }
+        ,
         editPageName(page) {
           Swal.fire({
             title: 'Edit Page Name',
