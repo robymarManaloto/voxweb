@@ -1,18 +1,7 @@
-{% include 'include/header.html' %} 
-<link href="static/voice_recognition/loading.css" rel="stylesheet">
-<link href="static/voice_recognition/loading.min.css" rel="stylesheet">
-<link href="static/voice_recognition/background.css" rel="stylesheet">
-<style>
-    .typewrite {
-    color: white;
-    text-decoration: none;
-    font-family: 'Montserrat';
-    font-size: 65px;
-    font-weight: bolder;
-}
-</style>
-<body>
-    {% include 'include/preloader.html' %}
+{% load static %}
+{% include 'voice_recognition/header.html' %} 
+{% include 'voice_recognition/preloader.html' %}
+
     <div class="container mt-5">
         <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
             <div class="col-12 text-center">
@@ -27,6 +16,7 @@
                     </a>
                 </h1>
                 <h1 id="first-text">
+                    <input id="project_id" type="hidden" value="{{ project.id }}">
                     <a href="" class="typewrite" data-period="3000" data-type='[ "Hi, I am Vox!", "Ready to create a website?", "Say \"Vox\" to start!"]'>
                         <span class="wrap"></span>
                     </a> 
@@ -52,17 +42,4 @@
     <div class="wave"></div>
     <div class="wave"></div>
     <div class="wave"></div>
-</body>
-<script src="static/voice_recognition/speech_recog.js"> </script>
-<script src="static/voice_recognition/typing.js"></script>
-<script>
-    const siriWave = new SiriWave({
-        container: document.getElementById('siri-container'),
-        width: 600,
-        height: 100,
-        color: '#FFFFFF',
-        speed: 0.05,
-        amplitude: 0.8,
-      });
-</script>
-{% include 'include/footer.html' %}
+{% include 'voice_recognition/footer.html' %}

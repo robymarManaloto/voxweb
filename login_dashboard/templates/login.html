@@ -1,37 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token }}">
-    <title>VoxWeb - Login</title>
-    <link rel="icon" type="image/x-icon" href="/static/voice_recognition/favicon.png">
-    <!-- Include Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="/static/background.css">
-    <link rel="stylesheet" href="/static/login.css">    
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.15/dark.min.css" rel="stylesheet">
-    <style>
-    .swal2-popup {
-      background: linear-gradient(45deg, #176B87, #04364A);
-    }
-    </style>
-    <script src="https://cdn.lordicon.com/lordicon-1.1.0.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-  </head>
-<body>
-  <section>
+{% include 'login/header.html' %} 
+{% load static %}
+<section>
     <div class="container">
         <div class="user signinBx">
-            <div class="imgBx"><img src="/static/backdrop1.jpg" alt="" /></div>
+            <div class="imgBx"><img src="{% static 'login_dashboard/login/backdrop1.jpg' %}" alt="" /></div>
             <div class="formBx">
                 <form id="login-form" method="post">
                     <div class="text-center mb-4">
-                        <img src="/static/logo_2.png" height="60px" style="margin-bottom: 2em;">
+                        <img src="{% static 'login_dashboard/logo_2.png' %}" height="60px" style="margin-bottom: 2em;">
                         <h1>Sign In</h1>
                     </div>
                     <div class="form-group">
@@ -74,89 +50,11 @@
                     </p>
                 </form>
             </div>
-            <div class="imgBx"><img src="/static/backdrop1.jpg" alt="" /></div>
+            <div class="imgBx"><img src="{% static 'login_dashboard/login/backdrop2.jpg' %}" alt="" /></div>
         </div>
     </div>
   </section>
       <div class="wave"></div>
       <div class="wave"></div>
       <div class="wave"></div>
-</body>
-<script src="/static/typing.js"></script>
-<script>
-  const toggleForm = () => {
-    const container = document.querySelector('.container');
-    container.classList.toggle('active');
-  };
-</script>
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-// static/js/ajax.js
-$(document).ready(function () {
-    $('#login-form').submit(function (e) {
-        e.preventDefault();
-        $.ajax({
-            type: 'POST',
-            url: '',
-            headers: {
-                'X-CSRFToken': $('[name=csrf-token]').attr('content')
-            },
-            data: $(this).serialize(),
-            success: function (data) {
-                if (data.success) {
-                    // Redirect to the dashboard on successful login
-                    window.location.href = '/dashboard/';
-                } else {
-                    // Display error messages using Bootstrap validation
-                    displayValidationErrors('login-form', data.message);
-                }
-            }
-        });
-    });
-
-    $('#register-form').submit(function (e) {
-        e.preventDefault();
-        $.ajax({
-            type: 'POST',
-            url: '/register/',
-            headers: {
-                'X-CSRFToken': $('[name=csrf-token]').attr('content')
-            },
-            data: $(this).serialize(),
-            success: function (data) {
-                if (data.success) {
-                    // Redirect to the login page on successful registration
-                        Swal.fire({
-                        icon: 'success',
-                        title: 'Registration Successful',
-                        text: 'You have been successfully registered!',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        // Redirect to the login page on popup confirmation
-                        if (result.isConfirmed || result.isDismissed) {
-                            window.location.href = '/';
-                        }
-                    });
-                } else {
-                    // Display error messages using Bootstrap validation
-                    displayValidationErrors('register-form', data.message);
-                }
-            }
-        });
-    });
-
-    function displayValidationErrors(formId, message) {
-        // Clear previous validation messages
-        $('#' + formId + ' .invalid-feedback').remove();
-
-        // Display new validation message with centered alignment
-        $('#' + formId + ' h1').after('<div class="invalid-feedback d-flex justify-content-center">' + message + '</div>');
-
-        // Add Bootstrap's is-invalid class to highlight the error fields
-        $('#' + formId + ' :input').addClass('is-invalid');
-    }
-
-});
-
-</script>
+{% include 'login/footer.html' %}

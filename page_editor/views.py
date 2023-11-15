@@ -1,16 +1,20 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import os
 from django.http import JsonResponse
 import re
 from . import regen
+from login_dashboard.models import Page
 
 # Render the editor page
-def editor(request):
-    return render(request, 'edit.html')
+def page_editor(request, project_id):
+    if 'username' not in request.session:
+        return redirect('/')
+    global project
+    project = int(project_id)
+    
+    return render(request, 'page_editor.html')
 
-# Get a list of HTML files from the 'temp/' folder
 def get_html_files(request):
-    folder_path = 'temp/'
     html_files = []
 
     # Regular expressions for extracting id, name, component, and styles
@@ -19,21 +23,19 @@ def get_html_files(request):
     component_pattern = r'<body>(.*?)<\/body>'
     styles_pattern = r'<style>(.*?)<\/style>'
     try:
-        for file_name in os.listdir(folder_path):
-            if file_name.endswith('.html'):
-                with open(os.path.join(folder_path, file_name), 'r') as file:
-                    content = file.read()
-
+        # Retrieve pages for the specified project_id
+        pages = Page.objects.filter(project__id=project)
+        for page in pages:
                 # Extract id, name, component, and styles using regex
-                name_match = re.search(name_pattern, content, re.DOTALL)
-                component_match = re.search(component_pattern, content, re.DOTALL)
-                styles_match = re.search(styles_pattern, content, re.DOTALL)
+                name_match = re.search(name_pattern, page.content, re.DOTALL)
+                component_match = re.search(component_pattern, page.content, re.DOTALL)
+                styles_match = re.search(styles_pattern, page.content, re.DOTALL)
 
                 # Create a dictionary with extracted information
                 if name_match and component_match and styles_match:
                     html_file_data = {
                         'id': f'page{id_counter}',
-                        'name': file_name.replace('.html', ''),
+                        'name': page.title.replace('.html', ''),
                         'component': component_match.group(1).strip(),
                         'styles': styles_match.group(1).strip()
                     }

@@ -80,3 +80,97 @@ body, html {
     opacity: 1;
   }
 }
+
+.swal2-backdrop-show{
+  background: linear-gradient(to right, #176B87, #04364A) !important;
+  transition: 0.5s filter !important;
+}
+
+.topbar {
+  background: linear-gradient(to right, #04364A, #176B87);
+  color: #F5FCCD;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Center vertically */
+}
+
+.left-content{
+  align-items: center; /* Center vertically */
+}
+
+.topbar button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+}
+
+.topbar button:hover {
+  transform: scale(1.1);
+}
+
+.gjs-one-bg {
+background-color: #176B87 !important;
+font-family: 'Montserrat';
+}
+
+.gjs-one-color {
+color: #64CCC5 !important;
+
+}
+
+.gjs-one-color-h:hover {
+color: #64CCC5 !important;
+
+}
+
+.gjs-two-bg {
+background-color: #64CCC5 !important;
+
+}
+
+.gjs-two-color {
+color: #ffffff !important;
+
+}
+
+.gjs-two-color-h:hover {
+color: #64CCC5 !important;
+
+}
+
+.gjs-three-bg {
+background-color: #64CCC5 !important;
+
+}
+
+.gjs-three-color {
+color: #64CCC5 !important;
+
+}
+
+.gjs-three-color-h:hover {
+color: #64CCC5 !important;
+
+}
+
+.gjs-four-bg {
+background-color: #176B87 !important;
+
+}
+
+.gjs-four-color {
+color: #64CCC5 !important;
+
+}
+
+.gjs-four-color-h:hover {
+color: #64CCC5 !important;
+}
+
+.gjs-cv-canvas__frames{
+background-color: #808080;
+}

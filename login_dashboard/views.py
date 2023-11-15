@@ -76,7 +76,6 @@ def dashboard(request):
     # Retrieve projects for the logged-in user
     user_projects = Project.objects.filter(user__username=username)
 
-
     return render(request, 'dashboard.html', {'username': username, 'projects': user_projects})
 
 def logout(request):

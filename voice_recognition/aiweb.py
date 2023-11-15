@@ -3,25 +3,28 @@ import os
 import re
 import json
 import concurrent.futures
+from django.db import transaction
+from login_dashboard.models import Page
+from login_dashboard.models import Project
 
 module_dir = os.path.join(os.path.dirname(__file__), '../libraries')
 sys.path.append(module_dir)
 from gpt4free import g4f
 
 # Main Function
-def generate(transcript):
+def generate(transcript, project_id):
     try:
         # Translate the transcript and store the result in the 'context' dictionary
         context = translate(transcript)
-        
+               
         # Process the 'context' dictionary with 'file_struct_theme'
         struct_theme = file_struct_theme(context)
         web_context = context.copy()
         web_context.update(struct_theme)
         
         # Page Generation
-        generate_pages(web_context)
-        
+        generate_pages(web_context, project_id)
+
         return True
     except Exception as e:
         # Handle exceptions here
@@ -64,33 +67,26 @@ def file_struct_theme(context):
     prompt = "Give me a list of possible HTML files for a proper website and give me a creative description of a theme for a website with the colors in hex (inside the key). Answer in JSON format only with 'files' and 'theme' as the key. {}"
     return get_data(context, prompt, ['files', 'theme'])
 
-def generate_pages(web_context):
-    output_dir = "temp"
-    os.makedirs(output_dir, exist_ok=True)
-
-    def remove_files_in_directory(directory):
-        for filename in os.listdir(directory):
-            file_path = os.path.join(directory, filename)
-            try:
-                if os.path.isfile(file_path):
-                    os.unlink(file_path)
-            except Exception as e:
-                print(f"Error deleting {file_path}: {e}")
-
-    # Delete all files in the output directory
-    remove_files_in_directory(output_dir)
-    
-    # Define a function to process each page and write the HTML content to a file.
-    def process_page(page):
+def generate_pages(web_context, project_id):
+    # Define a function to process each page and save the HTML content to the Page model.
+    def process_page(args):
+        page, project_id = args
         html_content = each_page(web_context, page)
         if html_content:
-            with open(os.path.join(output_dir, page), "w") as html_file:
-                html_file.write(html_content)
-    
+            # Create a Page instance and save it to the database
+            with transaction.atomic():
+                project = Project.objects.get(id=project_id)
+                page_instance = Page(project=project, title=page, content=html_content)
+                page_instance.save()
+
+    # Combine files and project_id into tuples
+    page_args = zip(web_context['files'], [project_id] * len(web_context['files']))
+
     # Use ThreadPoolExecutor to run the processing of pages concurrently.
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        executor.map(process_page, web_context['files'])
+        executor.map(process_page, page_args)
 
+# Modify the each_page function to return the HTML content
 def each_page(web_context, page):
     content = (
         "Give me a creative bootstrap design of HTML for {} in pages of {} with a theme of {} from the transcription. \" {} \". Add texts related to it. Give it a good layout. Add images using https://picsum.photos.".format(
@@ -106,4 +102,3 @@ def each_page(web_context, page):
         return each_page(web_context, page)
     else:
         return website
-

@@ -2,6 +2,7 @@ const loaderContainer = document.getElementById('loaderContainer');
 const startBtn = document.getElementById("startBtn");
 const output = document.getElementById("output");
 const form = document.getElementById("transcript");
+const projectId = document.getElementById("project_id").value;
 
 // Initialize the speech recognition
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -150,7 +151,7 @@ function confirmTranscript(transcription) {
 function sendTranscript(transcription) {
   var csrftoken = $("[name=csrfmiddlewaretoken]").val();
   $.ajax({
-    url: "/process_transcription/",
+    url: "/process_transcription/"+projectId+"/",
     type: "POST",
     headers: {
       "X-CSRFToken": csrftoken
@@ -159,7 +160,7 @@ function sendTranscript(transcription) {
       'transcription': transcription
     },
     success: function (data) {
-      window.location.href = "/editor/";
+      window.location.href = "/page_editor/";
     },
     error: function (xhr, status, error) {
       console.error(error);
@@ -241,3 +242,12 @@ function speak(text) {
 window.speechSynthesis.onvoiceschanged = () => {
   speak("Please allow access to your microphone to continue.");
 };
+
+const siriWave = new SiriWave({
+  container: document.getElementById('siri-container'),
+  width: 600,
+  height: 100,
+  color: '#FFFFFF',
+  speed: 0.05,
+  amplitude: 0.8,
+});
