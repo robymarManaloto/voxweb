@@ -34,14 +34,13 @@ def get_html_files(request):
                 # Create a dictionary with extracted information
                 if name_match and component_match and styles_match:
                     html_file_data = {
-                        'id': f'page{id_counter}',
+                        'id': page.id,
                         'name': page.title.replace('.html', ''),
                         'component': component_match.group(1).strip(),
                         'styles': styles_match.group(1).strip()
                     }
                     html_files.append(html_file_data)
                     id_counter += 1
-
         return JsonResponse({'html_files': html_files})
     except Exception as e:
         return JsonResponse({'result': 'error', 'message': str(e)})
@@ -63,3 +62,11 @@ def regenerate_page(request):
     else:
         # Handle other HTTP methods if needed
         return JsonResponse({'result': 'error', 'message': 'Invalid request method'})
+
+def remove_page(request, page_id):
+    try:
+        page = Page.objects.get(id=page_id)
+        page.delete()
+        return JsonResponse({'success': True})
+    except Page.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Page does not exist'})

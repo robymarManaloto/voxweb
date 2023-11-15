@@ -8,6 +8,7 @@
   function preparePages(pages) {
     return pages.map((page) => {
       return {
+        id: String(page.id),
         name: page.name,
         component: page.component,
         styles: page.styles,
@@ -139,24 +140,46 @@
           return pm.select(pageId);
         },
         removePage(pageId) {
-          Swal.fire({
-            title: 'Are you sure?',
-            text: 'You are about to remove the page. This action cannot be undone.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, remove it!'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.fire(
-                'Removed!',
-                'The page has been removed.',
-                'success'
-              );
-              return pm.remove(pageId);
-            }
-          });
+            // Your JavaScript code
+            Swal.fire({
+              title: 'Are you sure?',
+              text: 'You are about to remove the page. This action cannot be undone.',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, remove it!'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                  Swal.fire(
+                      'Removed!',
+                      'The page has been removed.',
+                      'success'
+                  );
+
+                  // Make an Ajax request to remove the page
+                  $.ajax({
+                      url: '/remove_page/' + pageId + '/',
+                      type: 'POST',  // You can use 'DELETE' method as well
+                      dataType: 'json',
+                      headers: {
+                        'X-CSRFToken': $('[name=csrf-token]').attr('content')
+                      },
+                      success: function (data) {
+                          if (data.success) {
+                              // Handle success, e.g., reload the page
+                              location.reload();
+                          } else {
+                              // Handle error, e.g., show an error message
+                              console.error(data.error);
+                          }
+                      },
+                      error: function (xhr, status, error) {
+                          console.error(error);
+                      }
+                  });
+              }
+            });
         },
         addPage() {
           const len = pm.getAll().length;
@@ -179,6 +202,7 @@
               }
             },
           });
+          
         },
         editPageName(page) {
           Swal.fire({
