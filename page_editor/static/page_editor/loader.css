@@ -3,6 +3,9 @@
   box-sizing: border-box;
 }
 
+.saved-changes {
+  transition: all 0.5s ease;
+}
 
 .loading {
   width: 100%;

@@ -13,6 +13,7 @@
         const pages = response.html_files;
         editor = initializeEditor(pages);
         addExportButtonListener(editor);
+        addSaveButtonListener(editor);
         createVueApp(editor);
         addVoiceListener(editor);
       
@@ -35,24 +36,38 @@
     });
   });
   
-  
-  
   document.getElementById('back-button').addEventListener('click', function() {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you want to go back to the last page?',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, go back!'
+        title: 'Are you sure?',
+        text: 'Do you want to go back to the dashboard?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, go back!'
     }).then((result) => {
-      if (result.isConfirmed) {
-        // Add your logic to navigate back to the last page here
-        window.location.href = '/dashboard/';
-      }
+        if (result.isConfirmed) {
+            // Ask for confirmation to save changes
+            Swal.fire({
+                title: 'Save changes?',
+                text: 'Do you want to save all changes before going back?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save changes!'
+            }).then((saveResult) => {
+                if (saveResult.isConfirmed) {
+                    // Call savePages function here
+                    savePages(editor); // Assuming 'editor' is defined in your context
+                }
+
+                // Regardless of whether changes are saved or not, go back to the dashboard
+                window.location.href = '/dashboard/';
+            });
+        }
     });
-  });
+});
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -89,5 +104,5 @@ function speak(text) {
 }
 
 window.speechSynthesis.onvoiceschanged = () => {
-  speak("This is a male voice.");
+  speak("");
 };

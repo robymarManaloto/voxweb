@@ -4,6 +4,7 @@ from django.http import JsonResponse
 import re
 from . import regen
 from login_dashboard.models import Page
+import json
 
 # Render the editor page
 def page_editor(request, project_id):
@@ -102,3 +103,25 @@ def create_page(request):
 
     # Handle other HTTP methods or invalid requests as needed
     return JsonResponse({'error': 'Invalid request'})
+
+def update_pages(request):
+    if request.method == 'POST':
+        try:
+            pages_data = json.loads(request.POST.get('pages_data'))
+
+            for page_data in pages_data:
+                page_id = page_data.get('id')
+                page_title = page_data.get('title')
+                page_content = page_data.get('content')
+
+                # Assuming you have a Page model with id, title, and content fields
+                page = Page.objects.get(pk=page_id)
+                page.title = page_title
+                page.content = page_content
+                page.save()
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})

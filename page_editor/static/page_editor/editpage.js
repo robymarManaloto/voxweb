@@ -110,16 +110,6 @@
     
   }
 
-  function savePages(editor) {
-    const pages = editor.Pages;
-    const allPages = pages.getAll();
-  }
-
-  function addSaveButtonListener(editor) {
-    const exportBtn = document.getElementById('save-btn');
-    exportBtn.addEventListener('click', () => savePages(editor));
-  }
-  
   // Function to add a click event listener to the export button
   function addExportButtonListener(editor) {
     const exportBtn = document.getElementById('export-btn');
@@ -251,3 +241,182 @@
       }
     });
   }
+
+
+
+
+
+  
+  function savePages(editor) {
+    const pages = editor.Pages;
+    const allPages = pages.getAll();
+    const resultPages = [];
+
+    try {
+        allPages.forEach(page => {
+            const id = page.get('id');
+            const title = page.get('name');
+            const html = editor.getHtml({ component });
+            const css = editor.getCss({ component });
+
+            const content = `
+            <!DOCTYPE html>
+            <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>${title}</title>
+                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+                    <style>
+                        ${css}
+                    </style>
+                </head>
+                <body>
+                    ${html}
+                </body>
+            </html>
+            `;
+
+            resultPages.push({
+                id: id,
+                title: title,
+                content: content
+            });
+        });
+
+        // Assuming you are using jQuery for AJAX
+        $.ajax({
+            url: '/update_pages/',
+            method: 'POST',
+            data: {
+                pages_data: JSON.stringify(resultPages)
+            },
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: "Success",
+                        text: "Pages updated successfully",
+                        icon: "success"
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Error",
+                        text: "An error occurred while updating the pages.",
+                        icon: "error"
+                    });
+                    console.error("Error updating pages:", response.error);
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    title: "Error",
+                    text: "An error occurred while updating the pages.",
+                    icon: "error"
+                });
+            }
+        });
+
+    } catch (error) {
+        Swal.fire({
+            title: "Error",
+            text: "An error occurred while processing the pages.",
+            icon: "error"
+        });
+        console.error("Error processing pages:", error);
+    }
+  }
+
+  
+  function savePages(editor) {
+    const pages = editor.Pages;
+    const allPages = pages.getAll();
+    const resultPages = [];
+    const saveButton = document.getElementById('save-btn');
+
+    try {
+        allPages.forEach(page => {
+            const id = page.get('id');
+            const title = page.get('name');
+            const component = page.getMainComponent();
+            const html = editor.getHtml({ component });
+            const css = editor.getCss({ component });
+
+            const content = `
+            <!DOCTYPE html>
+            <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>${title}</title>
+                    <style>
+                        ${css}
+                    </style>
+                </head>
+                <body>
+                    ${html}
+                </body>
+            </html>
+            `;
+
+            resultPages.push({
+                id: id,
+                title: title,
+                content: content
+            });
+        });
+
+        // Assuming you are using jQuery for AJAX
+        $.ajax({
+            url: '/update_pages/',
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': $('[name=csrf-token]').attr('content')
+            },
+            data: {
+                pages_data: JSON.stringify(resultPages)
+            },
+            success: function (response) {
+                if (response.success) {
+                    // Change button text to "Saved Changes" with transition
+                    saveButton.innerHTML = '<lord-icon src="https://cdn.lordicon.com/zawvkqfy.json" trigger="loop" state="loop-cycle" colors="primary:#ffffff" style="width:30px;height:30px;margin-top:-30px;"></lord-icon> Saved to Database';
+                    saveButton.classList.add('saved-changes');
+
+                    // Change back to "Save" after 2 seconds
+                    setTimeout(function () {
+                        saveButton.innerHTML = 'Save';
+                        saveButton.classList.remove('saved-changes');
+                    }, 5000);
+
+                } else {
+                    Swal.fire({
+                        title: "Error",
+                        text: "An error occurred while updating the pages.",
+                        icon: "error"
+                    });
+                    console.error("Error updating pages:", response.error);
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    title: "Error",
+                    text: "An error occurred while updating the pages.",
+                    icon: "error"
+                });
+            }
+        });
+
+    } catch (error) {
+        Swal.fire({
+            title: "Error",
+            text: "An error occurred while processing the pages.",
+            icon: "error"
+        });
+        console.error("Error processing pages:", error);
+    }
+  }
+
+
+function addSaveButtonListener(editor) {
+  const exportBtn = document.getElementById('save-btn');
+  exportBtn.addEventListener('click', () => savePages(editor));
+}
