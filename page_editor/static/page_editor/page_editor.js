@@ -14,6 +14,8 @@
         editor = initializeEditor(pages);
         addExportButtonListener(editor);
         addSaveButtonListener(editor);
+        addSavePagesShortcut(editor);
+        
         createVueApp(editor);
         addVoiceListener(editor);
       

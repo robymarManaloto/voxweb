@@ -111,7 +111,7 @@ def update_pages(request):
 
             for page_data in pages_data:
                 page_id = page_data.get('id')
-                page_title = page_data.get('title')
+                page_title = page_data.get('title')+'.html'
                 page_content = page_data.get('content')
 
                 # Assuming you have a Page model with id, title, and content fields
