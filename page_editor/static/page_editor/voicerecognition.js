@@ -78,35 +78,54 @@ function voxListen(recognition) {
 }
 
 function changePage(html, transcript, editor) {
-  const csrftoken = $('[name=csrfmiddlewaretoken]').val();
-  askvox.innerHTML = '<lord-icon src="https://cdn.lordicon.com/twemlvxy.json" trigger="loop"  state="loop-cycle" colors="primary:#ffffff" style="width:30px;height:30px; margin-bottom:-8px;"></lord-icon> Generating...';
+  const pages = editor.Pages;
+  const page = pages.getSelected();
+  askvox.innerHTML = '<lord-icon src="https://cdn.lordicon.com/twemlvxy.json" trigger="loop" state="loop-cycle" colors="primary:#ffffff" style="width:30px;height:30px; margin-bottom:-8px;"></lord-icon> Generating...';
   $.ajax({
-    url: '/editor/regenerate_page/',
+    url: '/page_editor/regenerate_page/',
     type: 'POST',
     headers: {
-      'X-CSRFToken': csrftoken,
+      'X-CSRFToken': $('[name=csrf-token]').attr('content'),
     },
     data: {
       transcription: transcript,
       html: html,
+      name: page.get('name'),
     },
     success: function (data) {
       try {
-        const pages = editor.Pages;
-        const page = pages.getSelected();
         pages.add({
+          id: String(data['id']),
           name: page.get('name'),
           component: data['component'],
           styles: data['styles'],
         });
-        speak("Your changes on "+page.get('name')+" page have been processed successfully.");
+        speak("Your changes on " + page.get('name') + " page have been processed successfully.");
         askvox.innerHTML = '<lord-icon src="https://cdn.lordicon.com/rhprarly.json" trigger="loop" colors="primary:#ffffff,secondary:#ffffff" style="width:30px;height:30px; margin-bottom:-8px;"></lord-icon> Ask Vox, they say!';
       } catch (err) {
-        console.error(err);
+        console.error(error);
+        // Display SweetAlert for error
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'An error occurred. Please try again.',
+        }).then(() => {
+          // Reload the page
+          location.reload();
+        });
       }
     },
     error: function (xhr, status, error) {
       console.error(error);
+      // Display SweetAlert for error
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred. Please try again.',
+      }).then(() => {
+        // Reload the page
+        location.reload();
+      });
     },
   });
 }

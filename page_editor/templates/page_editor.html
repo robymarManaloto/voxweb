@@ -42,12 +42,24 @@
           <div class="pages">
             <div v-for="page in pages" :key="page.id" :class="{page: 1, selected: isSelected(page) }" @click="selectPage(page.id)">
               <i class="fas fa-code"></i>
-              <span @click="editPageName(page)">[[ page.get('name') || page.id ]]</span> <span v-if="!isSelected(page)" @click="removePage(page.id)" class="page-close"><lord-icon
+              <span>[[ page.get('name') || page.id ]]</span> 
+              <span v-if="!isSelected(page)" @click="editPageName(page)">
+                <lord-icon
+                src="https://cdn.lordicon.com/wuvorxbv.json"
+                trigger="hover"
+                state="hover-line"
+                colors="primary:#ffffff,secondary:#ffffff"
+                style="width:15px;height:15px;margin-bottom:-3px;">
+              </lord-icon>
+              </span>
+
+<span v-if="!isSelected(page)" @click="removePage(page.id)" class="page-close"><lord-icon
     src="https://cdn.lordicon.com/drxwpfop.json"
     trigger="hover"
     colors="primary:#ffffff,secondary:#64ccc5"
     style="width:20px;height:20px;margin-bottom:-7px;">
 </lord-icon></span>
+
 
               </div>
                                 

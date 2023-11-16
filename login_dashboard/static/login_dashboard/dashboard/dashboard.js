@@ -18,8 +18,7 @@ function deleteProject(projectId, projectName) {
 fetch(`/delete_project/${projectId}/`, {
     method: 'POST',
     headers: {
-        'X-CSRFToken': '{{ csrf_token }}',
-        'Content-Type': 'application/json',
+      'X-CSRFToken': $('[name=csrf-token]').attr('content')
     },
     body: JSON.stringify({})
 })
@@ -28,7 +27,7 @@ fetch(`/delete_project/${projectId}/`, {
     if (data.status === 'success') {
         Swal.fire('Deleted!', `${projectName} has been deleted.`, 'success');
         // Remove the deleted project from the DOM
-        const deletedProjectElement = document.getElementById(`project-${projectId}`);
+        const deletedProjectElement = document.getElementById(`remove_project-${projectId}`);
         if (deletedProjectElement) {
             deletedProjectElement.remove();
             
@@ -249,7 +248,7 @@ setTimeout(function() {
   loader.style.display = "none";
 }, 2000);
 
-
+ 
 
   // Check if there are no project items and display the placeholder text
   window.onload =  noItems();
@@ -264,3 +263,52 @@ setTimeout(function() {
       placeholderText.style.display = 'none';
     }
   }
+
+
+
+  function showUpdateAlert(projectId, currentName) {
+    Swal.fire({
+        title: 'Update Project Name',
+        input: 'text',
+        inputValue: currentName,
+        showCancelButton: true,
+        confirmButtonText: 'Update',
+        cancelButtonText: 'Cancel',
+        preConfirm: (newName) => {
+            if (!newName) {
+                Swal.showValidationMessage('Please enter a project name');
+            }
+            return newName;
+        },
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            updateProjectName(projectId, result.value);
+        }
+    });
+}
+
+function updateProjectName(projectId, newName) {
+    // AJAX request to update project name
+    $.ajax({
+        url: '/update_project_name/',  // Update the URL according to your project's URL structure
+        type: 'POST',
+        headers: {
+          'X-CSRFToken': $('[name=csrf-token]').attr('content')
+        },
+        data: {
+            'project_id': projectId,
+            'new_name': newName
+        },
+        success: function (data) {
+            // Handle success, for example, show a success message
+            Swal.fire('Success!', 'Project name updated successfully.', 'success');
+            const textElement = document.getElementById('text-project-'+projectId);
+            textElement.textContent = data['new_name'];
+        },
+        error: function (xhr, status, error) {
+            // Handle errors, for example, show an error message
+            Swal.fire('Error!', 'Failed to update project name.', 'error');
+        }
+    });
+}

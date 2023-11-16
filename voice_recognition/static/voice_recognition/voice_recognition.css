@@ -5,3 +5,12 @@
     font-size: 65px;
     font-weight: bolder;
 }
+
+.swal2-popup {
+    background: linear-gradient(45deg, #176B87, #04364A) !important;
+  }
+  
+  .swal2-input, .swal2-title{
+    color: #fff !important;
+  }
+  

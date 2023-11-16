@@ -5,6 +5,7 @@ import re
 from . import regen
 from login_dashboard.models import Page
 import json
+from django.views.decorators.csrf import csrf_exempt
 
 # Render the editor page
 def page_editor(request, project_id):
@@ -47,15 +48,38 @@ def get_html_files(request):
         return JsonResponse({'result': 'error', 'message': str(e)})
 
 # Regenerate HTML page based on transcription and existing HTML
+@csrf_exempt
 def regenerate_page(request):
     if request.method == 'POST':
         try:
             transcription = request.POST.get('transcription')
             html = request.POST.get('html')
+            name = request.POST.get('name')
 
             # Generate new HTML using the 'regen' module
             result = regen.generate(transcription, html)
-            
+
+            name_page = Page.objects.create(
+                project_id = project,
+                title = name+'.html',
+                content ="""
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>About Us - Welcome to our Agricultural Website</title>
+                <style>
+                </style>
+                """+result['styles'] +"""
+                </head>
+                <body>
+                    """+result['component'] +"""
+                </body>
+                </html>
+                """
+            )
+            result['id'] = name_page.id
             return JsonResponse(result)
         except Exception as e:
             # Handle exceptions and return an error response
@@ -64,6 +88,7 @@ def regenerate_page(request):
         # Handle other HTTP methods if needed
         return JsonResponse({'result': 'error', 'message': 'Invalid request method'})
 
+@csrf_exempt
 def remove_page(request, page_id):
     try:
         page = Page.objects.get(id=page_id)
@@ -72,6 +97,7 @@ def remove_page(request, page_id):
     except Page.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Page does not exist'})
 
+@csrf_exempt
 def create_page(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -104,6 +130,7 @@ def create_page(request):
     # Handle other HTTP methods or invalid requests as needed
     return JsonResponse({'error': 'Invalid request'})
 
+@csrf_exempt
 def update_pages(request):
     if request.method == 'POST':
         try:

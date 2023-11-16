@@ -58,7 +58,7 @@
       allPages.forEach(page => {
         const component = page.getMainComponent();
         const html = editor.getHtml({ component });
-        const pageCSS = editor.getCss({ component });
+        const pageCSS = reduceCss(editor.getCss({ component }));
     
         const pageHTML = `
           <html>
@@ -249,37 +249,45 @@
     const saveButton = document.getElementById('save-btn');
 
     try {
+        const processPage = (page) => {
+          const id = page.get('id');
+          const title = page.get('name');
+          const component = page.getMainComponent();
+          const html = editor.getHtml({ component });
+          const css = reduceCss(editor.getCss({ component }));
+          const content = `
+              <!DOCTYPE html>
+              <html lang="en">
+                  <head>
+                      <meta charset="UTF-8">
+                      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                      <title>${title}</title>
+                      <style>
+                          ${css}
+                      </style>
+                  </head>
+                  <body>
+                      ${html}
+                  </body>
+              </html>
+          `;
+      
+          return {
+              id: id,
+              title: title,
+              content: content
+          };
+      };
+
+      if (allPages.length === 1) {
+          const selectedPage = pages.getSelected();
+          resultPages.push(processPage(selectedPage));
+      } else {
         allPages.forEach(page => {
-            const id = page.get('id');
-            const title = page.get('name');
-            const component = page.getMainComponent();
-            const html = editor.getHtml({ component });
-            const css = editor.getCss({ component });
-
-            const content = `
-            <!DOCTYPE html>
-            <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>${title}</title>
-                    <style>
-                        ${css}
-                    </style>
-                </head>
-                <body>
-                    ${html}
-                </body>
-            </html>
-            `;
-
-            resultPages.push({
-                id: id,
-                title: title,
-                content: content
-            });
+          resultPages.push(processPage(page));
         });
-
+      }
+    
         // Assuming you are using jQuery for AJAX
         $.ajax({
             url: '/update_pages/',
@@ -330,7 +338,26 @@
     }
   }
 
-
+  function reduceCss(cssString) {
+    // Split the CSS string into individual rules
+    const rules = cssString.split('}');
+  
+    // Use a Set to store unique rules
+    const uniqueRules = new Set();
+  
+    // Filter out duplicates and add rules to the set
+    rules.forEach(rule => {
+      if (rule.trim() !== '') {
+        uniqueRules.add(rule.trim() + '}');
+      }
+    });
+  
+    // Convert the set back to a string
+    const reducedCSS = [...uniqueRules].join('');
+  
+    return reducedCSS;
+  }
+  
 function addSaveButtonListener(editor) {
   const exportBtn = document.getElementById('save-btn');
   exportBtn.addEventListener('click', () => savePages(editor));

@@ -83,7 +83,7 @@ body, html {
 
 .swal2-backdrop-show{
   background: linear-gradient(to right, #176B87, #04364A) !important;
-  transition: 0.5s filter !important;
+  transition: opacity 0.5s ease;
 }
 
 .topbar {

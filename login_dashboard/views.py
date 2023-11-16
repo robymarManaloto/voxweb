@@ -6,6 +6,7 @@ from .models import Project
 from .forms import RegistrationForm
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 
 def login(request):
     if request.method == 'POST':
@@ -78,6 +79,7 @@ def dashboard(request):
 
     return render(request, 'dashboard.html', {'username': username, 'projects': user_projects})
 
+@csrf_exempt
 def logout(request):
     if request.method == 'POST':
         # Clear all session data
@@ -116,6 +118,7 @@ def change_password(request):
 
     return redirect('login')
 
+@csrf_exempt
 def delete_account(request):
     if request.method == 'POST':
         username = request.session['username']
@@ -126,7 +129,7 @@ def delete_account(request):
     else:
         return JsonResponse({'success': False})
 
-
+@csrf_exempt
 def create_project(request):
     if request.method == 'POST':
         project_name = request.POST.get('project_name')
@@ -137,7 +140,8 @@ def create_project(request):
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False, 'error': 'Invalid request method'})
-    
+
+@csrf_exempt
 def delete_project(request, project_id):
     project = get_object_or_404(Project, id=project_id)
     
@@ -147,3 +151,20 @@ def delete_project(request, project_id):
         return JsonResponse({'status': 'success', 'message': f'{project_name} has been deleted.'})
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+@csrf_exempt
+def update_project_name(request):
+    if request.method == 'POST':
+        project_id = request.POST.get('project_id')
+        new_name = request.POST.get('new_name')
+
+        # Get the project
+        project = get_object_or_404(Project, id=project_id)
+
+        # Update the project name
+        project.name = new_name
+        project.save()
+
+        return JsonResponse({'status': 'success', 'new_name': project.name})
+    else:
+        return JsonResponse({'status': 'error'})

@@ -51,20 +51,38 @@
     
       <div class="card-body text-center">
         <div class="list-group" id="projectList">
-          <!-- Project Items-->
-          {% for project in projects %}
-          <a id="project-{{ project.id }}" href="/start_project/{{ project.id }}" class="list-group-item list-group-item-action d-flex align-items-center">
-              <img src="{% static 'login_dashboard/dashboard/bot.png' %}" alt="Project Logo" class="thumbnail">
-              {{ project.name }}
-              <i class="ml-auto" onclick="showDeleteAlert('{{ project.id }}', '{{ project.name }}')">
-                  <lord-icon
-                      src="https://cdn.lordicon.com/drxwpfop.json"
-                      trigger="hover"
-                      colors="primary:#c71f16,secondary:#c71f16"
-                      style="width:25px;height:25px">
-                  </lord-icon>
-              </i>
-          </a>
+            <!-- Project Items-->
+            {% for project in projects %}
+            <div id="remove_project-{{ project.id }}" class="list-group-item d-flex align-items-center">
+                <!-- Clickable Project Link -->
+                <a id="project-{{ project.id }}" href="/start_project/{{ project.id }}" class="project-link">
+                    <img src="{% static 'login_dashboard/dashboard/bot.png' %}" alt="Project Logo" class="thumbnail">
+                    <span id="text-project-{{ project.id }}">{{ project.name }}</span>
+                </a>
+        
+                <!-- Edit and Delete Icons -->
+                <div class="ml-auto">
+                    <!-- Delete Button -->
+                    <i class="delete-icon" onclick="showDeleteAlert('{{ project.id }}', '{{ project.name }}')">
+                        <lord-icon
+                            src="https://cdn.lordicon.com/drxwpfop.json"
+                            trigger="hover"
+                            colors="primary:#c71f16,secondary:#c71f16"
+                            style="width:25px;height:25px">
+                        </lord-icon>
+                    </i>
+                    
+                    <!-- Edit Button -->
+                    <i class="edit-icon" onclick="showUpdateAlert('{{ project.id }}', '{{ project.name }}')">
+                        <lord-icon
+                            src="https://cdn.lordicon.com/wuvorxbv.json"
+                            trigger="hover"
+                            state="hover-line"
+                            style="width:25px;height:25px">
+                        </lord-icon>
+                    </i>
+                </div>
+            </div>
         {% endfor %}
           <!-- Placeholder when no projects -->
           <div class="placeholder-text" id="placeholderText" style="display: none; text-align: center; padding: 20px; margin: 10px;">

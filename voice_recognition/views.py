@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from . import aiweb
 from login_dashboard.models import Page
 from login_dashboard.models import Project
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def start_project(request, project_id):
@@ -24,6 +25,7 @@ def start_project(request, project_id):
 
     return render(request, 'voice_recognition.html', {'project': project})
 
+@csrf_exempt
 def process_transcription(request, project_id):
     if request.method == 'POST':
         transcription = request.POST.get('transcription')

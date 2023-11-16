@@ -251,3 +251,23 @@ const siriWave = new SiriWave({
   speed: 0.05,
   amplitude: 0.8,
 });
+
+  document.getElementById('back-button').addEventListener('click', function() {
+    // Display a SweetAlert confirmation dialog
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you really want to go back to dashboard?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, go back!',
+        cancelButtonText: 'No, cancel'
+    }).then((result) => {
+        // If the user clicks "Yes, go back!", navigate to '/dashboard/'
+        if (result.isConfirmed) {
+            window.location.href = '/dashboard/';
+        }
+    });
+    
+  });
