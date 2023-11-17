@@ -1,4 +1,4 @@
-# Django App README
+# VoxWeb App README
 
 Welcome to the README for your Django application! This document is designed to provide an overview of your project, instructions for setup, and information about how to use and extend the application.
 
@@ -15,15 +15,15 @@ Welcome to the README for your Django application! This document is designed to 
 
 ## Project Overview
 
-VoxWeb: A Speech-Enabled Automatic Website Building System is a software solution designed to simplify and streamline the process of creating web pages through voice recognition technology.
+**VoxWeb: A Speech-Enabled Automatic Website Building System** is a software solution designed to simplify and streamline the process of creating web pages through voice recognition technology. The application encompasses a range of functionalities, including user authentication, project management, voice-enabled editing, and automatic website building.
 
 ## Getting Started
 
-Explain how to get your Django app up and running on a local development environment. This section should include details on prerequisites, installation steps, and any additional setup that may be required.
+To get your Django app up and running on a local development environment, follow these steps:
 
 ### Prerequisites
 
-List the software and tools that users need to have installed before they can run your Django app. Here's an example:
+Ensure the following software and tools are installed:
 
 - Python 3.x
 - Django
@@ -82,20 +82,34 @@ Your Django app should now be running at http://127.0.0.1:8000/. You can access 
 
 ## Usage
 
-Explain how to use your Django app, including any user roles, functionality, and how to access specific features. If there are any important configuration settings, provide guidance on how to modify them.
+To use the VoxWeb application:
+
+- **Login/Sign-in Page**: Create accounts and log in securely. Implement password recovery for forgotten passwords.
+
+- **Dashboard**: View project overviews, details, and manage projects. Receive notifications for project updates.
+
+- **Profile Management**: Change passwords, delete accounts, and log out.
+
+- **Voice Recognition Page**: Utilize voice input, prompt storage, and voice feedback for automatic website building.
+
+- **Drag and Drop Website Project Edit Section**: Customize and edit website content using drag-and-drop functionality. Enable voice-enabled editing for a flexible user experience.
+
+- **Exporting Code**: Include an option to export generated website files into a zip file.
+
+- **Overall Application Functionalities**: Manage user profiles, implement security measures, provide help/support resources, and ensure responsive design.
 
 ## Folder Structure
 
-Describe the organization of your project's folders and files. Provide an overview of the purpose of each major directory in your Django app.
+The project's folder structure is organized as follows:
+
+- **static**: Static files
+- **login_dashboard, page_editor, voice_recognition**: Three apps
+- **voxweb**: Main project folder
 
 ## Contributing
 
-Encourage others to contribute to your project by providing guidelines for how they can submit bug reports, feature requests, and pull requests. Include information on the preferred coding style, development workflow, and any other relevant details.
+Contributions to this project are welcome! Please follow the guidelines in the [CONTRIBUTING.md](CONTRIBUTING.md) file for bug reports, feature requests, and pull requests.
 
 ## License
 
-Specify the license under which your Django app is distributed. For example, if you're using an open-source license, include a link to the license text.
-
----
-
-Feel free to customize this README template to suit the specific details and requirements of your Django app. A well-documented README is a valuable resource for both developers and users of your application.
+This Django app is distributed under the [MIT License](LICENSE).
