@@ -1,0 +1,14 @@
+{
+    "builds": [
+      {
+        "src": "voxweb/wsgi.py",
+        "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "voxweb/wsgi.py"
+      }
+    ]
+}
