@@ -1,3 +1,5 @@
+![alt text](https://github.com/robymarManaloto/voxweb/blob/main/static/login_dashboard/logo_2.png?raw=true)
+
 # VoxWeb App README
 
 Welcome to the README for your Django application! This document is designed to provide an overview of your project, instructions for setup, and information about how to use and extend the application.
