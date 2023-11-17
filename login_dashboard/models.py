@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class UserProfile(models.Model):
     username = models.CharField(max_length=30, unique=True)
@@ -11,6 +12,7 @@ class UserProfile(models.Model):
 class Project(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+    last_update = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.user.username}'s {self.name} Project"

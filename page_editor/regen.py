@@ -10,7 +10,16 @@ from gpt4free import g4f
 # Define a function to generate a web page based on a given transcript and current HTML content
 def generate(transcript, curr_html):
     context = translate(transcript)  # Translate the transcript into a readable form
-    return generate_page(context['message'], curr_html)
+    
+    if context['error'] == 'true':
+        return context
+    
+    page_components = generate_page(context['message'], curr_html)
+    
+    combine_dict = context.copy()
+    combine_dict.update(page_components)
+    
+    return combine_dict
 
 # Define a function to parse HTML content from a response
 def parse_html(html_string):
@@ -56,8 +65,8 @@ def get_data(context, prompt, keys):
 
 # Define a function to translate a given transcript into a readable format
 def translate(transcript):
-    prompt = "Translate the following into a readable form and provide the answer in JSON format with 'message' as the key: {}"
-    return get_data(transcript, prompt, ['message'])
+    prompt = "Translate this in readable form. Answer in JSON format only  [error: 'false', message: '']. If the message is not within the guidelines or lack of information for generating a website, answer with only [error: 'true', message: '<The reason why its not accepted.><Suggestions>']. The transcription: {}"
+    return get_data(transcript, prompt, ['error','message'])
 
 # Define a function to parse JSON data from a response
 def parse_json(response):

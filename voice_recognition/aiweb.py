@@ -14,9 +14,10 @@ from gpt4free import g4f
 # Main Function
 def generate(transcript, project_id):
     try:
-        # Translate the transcript and store the result in the 'context' dictionary
         context = translate(transcript)
-               
+        if context['error'] == 'true':
+            return context
+        
         # Process the 'context' dictionary with 'file_struct_theme'
         struct_theme = file_struct_theme(context)
         web_context = context.copy()
@@ -25,7 +26,7 @@ def generate(transcript, project_id):
         # Page Generation
         generate_pages(web_context, project_id)
 
-        return True
+        return web_context
     except Exception as e:
         # Handle exceptions here
         print(f"An error occurred: {e}")
@@ -57,14 +58,15 @@ def get_data(context, prompt, keys):
     data = parse_json(response)
     if not isinstance(data, dict) or data is None or not len([key for key in keys if key in data]) == len(keys):
         return get_data(context, prompt, keys)
+    
     return data
 
 def translate(transcript):
-    prompt = "Translate this in readable form. Answer in JSON format only with 'message' as the key. {}"
-    return get_data(transcript, prompt, ['message'])
+    prompt = "Translate this in readable form. Answer in JSON format only  [error: 'false', message: '']. If the message is not within the guidelines or lack of information for generating a website, answer with only [error: 'true', message: '<The reason why its not accepted.><Suggestions>']. The transcription: {}"
+    return get_data(transcript, prompt, ['message', 'error'])
 
 def file_struct_theme(context):
-    prompt = "Give me a list of possible HTML files for a proper website and give me a creative description of a theme for a website with the colors in hex (inside the key). Answer in JSON format only with 'files' and 'theme' as the key. {}"
+    prompt = "Give me a list of possible HTML files for a proper website. Give me a creative description of a theme for a website with the colors in hex. Answer in JSON format only with 'files' and 'theme' as the key. The client says: {}"
     return get_data(context, prompt, ['files', 'theme'])
 
 def generate_pages(web_context, project_id):
@@ -89,8 +91,8 @@ def generate_pages(web_context, project_id):
 # Modify the each_page function to return the HTML content
 def each_page(web_context, page):
     content = (
-        "Give me a creative bootstrap design of HTML for {} in pages of {} with a theme of {} from the transcription. \" {} \". Add texts related to it. Give it a good layout. Add images using https://picsum.photos.".format(
-            page, web_context['files'], web_context['theme'], web_context['message']
+        "Your role is now the best website designer. You have client that says he want : {}. If the request is not possible or lack of details continue to create an awesome website in Bootstrap 4 with a theme of {}. The html to generate is {} out of {}.  Don't use Lorem Ipsum, think some content for your client. Use https://picsum.photos/ as placeholders of random image. Make the website complete with header, body, footer. Give the complete html only. ".format(
+            web_context['message'],  web_context['theme'], page, web_context['files'], 
         )
     )
     response = g4f.ChatCompletion.create(

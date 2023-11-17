@@ -116,21 +116,25 @@ function changePage(html, transcript, editor) {
       }
     },
     error: function (xhr, status, error) {
-      console.error(error);
-      // Display SweetAlert for error
+      askvox.innerHTML = '<lord-icon src="https://cdn.lordicon.com/rhprarly.json" trigger="loop" colors="primary:#ffffff,secondary:#ffffff" style="width:30px;height:30px; margin-bottom:-8px;"></lord-icon> Ask Vox, they say!';
       Swal.fire({
-        icon: 'error',
         title: 'Error',
-        text: 'An error occurred. Please try again.',
-      }).then(() => {
-        // Reload the page
-        location.reload();
+        text: xhr.responseJSON.message || 'There was an error processing the transcription. Retry?',
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonText: 'Retry',
+        cancelButtonText: 'Cancel',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          changePage(html, transcript, editor);
+        }
       });
+      speak(xhr.responseJSON.message || 'There was an error processing the transcription. Retry?');
     },
   });
 }
 
-function heardYou(){
+function heardYou() {
   Swal.fire({
     title: "Listening...",
     icon: 'info',

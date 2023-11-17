@@ -3,7 +3,7 @@ import os
 from django.http import JsonResponse
 import re
 from . import regen
-from login_dashboard.models import Page
+from login_dashboard.models import Project, Page
 import json
 from django.views.decorators.csrf import csrf_exempt
 
@@ -13,9 +13,10 @@ def page_editor(request, project_id):
         return redirect('/')
     global project
     project = int(project_id)
-    
-    return render(request, 'page_editor.html')
+    user_project = Project.objects.get(id=project_id, user__username=request.session['username'])
 
+    return render(request, 'page_editor.html', {'projects': user_project})
+    
 def get_html_files(request):
     html_files = []
 
@@ -58,29 +59,33 @@ def regenerate_page(request):
 
             # Generate new HTML using the 'regen' module
             result = regen.generate(transcription, html)
-
-            name_page = Page.objects.create(
-                project_id = project,
-                title = name+'.html',
-                content ="""
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>About Us - Welcome to our Agricultural Website</title>
-                <style>
-                </style>
-                """+result['styles'] +"""
-                </head>
-                <body>
-                    """+result['component'] +"""
-                </body>
-                </html>
-                """
-            )
-            result['id'] = name_page.id
-            return JsonResponse(result)
+            print(result)
+            if result['error'] == 'false':
+                name_page = Page.objects.create(
+                    project_id = project,
+                    title = name+'.html',
+                    content ="""
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>About Us - Welcome to our Agricultural Website</title>
+                    <style>
+                    </style>
+                    """+result['styles'] +"""
+                    </head>
+                    <body>
+                        """+result['component'] +"""
+                    </body>
+                    </html>
+                    """
+                )
+                result['id'] = name_page.id
+                return JsonResponse(result)
+            else:
+                response_data = {'error': True, 'message': result['message']}
+                return JsonResponse(response_data, status=400)  # Use a 400 status code for errors
         except Exception as e:
             # Handle exceptions and return an error response
             return JsonResponse({'result': 'error', 'message': str(e)})

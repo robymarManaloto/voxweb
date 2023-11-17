@@ -29,12 +29,12 @@ def start_project(request, project_id):
 def process_transcription(request, project_id):
     if request.method == 'POST':
         transcription = request.POST.get('transcription')
-        if aiweb.generate(transcription, project_id):
-            # Return a success response
-            response_data = {'message': 'Transcription processed successfully'}
-
+        result = aiweb.generate(transcription, project_id)
+        print(result)
+        if result['error'] == 'false':
+            response_data = {'error': False, 'message': 'Transcription processed successfully'}
             return JsonResponse(response_data)
         else:
             # Return an error response
-            response_data = {'error': 'Error processing transcription'}
-            return JsonResponse(response_data, status=400)  # Set the HTTP status code to 400 (Bad Request)
+            response_data = {'error': True, 'message': result['message']}
+            return JsonResponse(response_data, status=400)  # Use a 400 status code for errors

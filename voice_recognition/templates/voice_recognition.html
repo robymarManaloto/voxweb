@@ -1,53 +1,47 @@
 {% load static %}
-{% include 'voice_recognition/header.html' %} 
+{% include 'voice_recognition/header.html' %}
 {% include 'voice_recognition/preloader.html' %}
-    <button id="back-button" style="padding:0.5em;background-color:transparent;">
-        <lord-icon
-        src="https://cdn.lordicon.com/eavayqgw.json"
-        trigger="hover"
-        stroke="bold"
-        colors="primary:#ffffff,secondary:#08a88a"
-        style="width:40px;height:40px; margin-bottom:-10px;">
-        </lord-icon>
-  </button>
-    <div class="container mt-5">
-        <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
-            <div class="col-12 text-center">
-                <h1 id="listening-text" style="display:none">
-                    <a href="" class="typewrite" data-period="100" data-type='[ "Listening...", "What is the purpose of your website?",
+<button id="back-button" style="padding:0.5em;background-color:transparent;">
+    <lord-icon src="https://cdn.lordicon.com/eavayqgw.json" trigger="hover" stroke="bold"
+        colors="primary:#ffffff,secondary:#08a88a" style="width:40px;height:40px; margin-bottom:-10px;">
+    </lord-icon>
+</button>
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+        <div class="col-12 text-center">
+            <h1 id="listening-text" style="display:none">
+                <a href="" class="typewrite" data-period="100" data-type='[ "Listening...", "What is the purpose of your website?",
                     "What type of content do you want to include?", "What color scheme do you prefer for your website?",
                     "Do you have any specific font style in mind?", "Do you have a logo for your website? If yes, describe it.",
                     "Do you want to include images or videos? What are they about?",  "Do you need a contact form for visitors to reach you?",
                     "Should there be a blog section? What topics do you want to cover?",     "What keywords best describe your website? (e.g., cooking, photography)",
                     "Is there a specific location or area you want to target?" ]' style="font-size:50px;">
-                        <span class="wrap"></span>
-                    </a>
-                </h1>
-                <h1 id="first-text">
-                    <input id="project_id" type="hidden" value="{{ project.id }}">
-                    <a href="" class="typewrite" data-period="3000" data-type='[ "Hi, I am Vox!", "Ready to create a website?", "Say \"Vox\" to start!"]'>
-                        <span class="wrap"></span>
-                    </a> 
-                </h1>
-                <div id="siri-container" ></div> 
-                <!-- Speech recognition button -->
-                <form id="transcript">
-                    {% csrf_token %}
-                    <div id="siri-container"></div>
-                    <button id="startBtn" type="button" class="btn btn-primary" style="background:transparent;border:none;">
-                        <lord-icon
-                        src="https://cdn.lordicon.com/xumlwjxf.json"
-                        trigger="loop"
-                        colors="primary:#DAFFFB,secondary:#dafffb,tertiary:#64ccc5"
-                        style="width:250px;height:250px">
+                    <span class="wrap"></span>
+                </a>
+            </h1>
+            <h1 id="first-text">
+                <input id="project_id" type="hidden" value="{{ project.id }}">
+                <a href="" class="typewrite" data-period="3000"
+                    data-type='[ "Hi, I am Vox!", "Ready to create a website?", "Say \"Vox\" to start!"]'>
+                    <span class="wrap"></span>
+                </a>
+            </h1>
+            <div id="siri-container"></div>
+            <!-- Speech recognition button -->
+            <form id="transcript">
+                {% csrf_token %}
+                <div id="siri-container"></div>
+                <button id="startBtn" type="button" class="btn btn-primary" style="background:transparent;border:none;">
+                    <lord-icon src="https://cdn.lordicon.com/xumlwjxf.json" trigger="loop"
+                        colors="primary:#DAFFFB,secondary:#dafffb,tertiary:#64ccc5" style="width:250px;height:250px">
                     </lord-icon>
-                    </button>
-                    <input id="output" type="hidden">
-                </form>
-            </div>
+                </button>
+                <input id="output" type="hidden">
+            </form>
         </div>
     </div>
-    <div class="wave"></div>
-    <div class="wave"></div>
-    <div class="wave"></div>
+</div>
+<div class="wave"></div>
+<div class="wave"></div>
+<div class="wave"></div>
 {% include 'voice_recognition/footer.html' %}

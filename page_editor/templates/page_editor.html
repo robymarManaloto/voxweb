@@ -1,85 +1,72 @@
 {% load static %}
-{% include 'page_editor/header.html' %} 
+{% include 'page_editor/header.html' %}
 {% csrf_token %}
 
-    <div class="topbar">
-      <div class="left-content">
-        <!-- Logo goes here -->
-        <button id="back-button" style="padding:0.3em;">
-          <lord-icon
-            src="https://cdn.lordicon.com/eavayqgw.json"
-            trigger="hover"
-            stroke="bold"
-            colors="primary:#ffffff,secondary:#08a88a"
-            style="width:30px;height:30px; margin-bottom:-10px;">
+<div class="topbar">
+  <div class="left-content">
+    <!-- Logo goes here -->
+    <button id="back-button" class="btn" style="padding:0.3em;">
+      <lord-icon src="https://cdn.lordicon.com/eavayqgw.json" trigger="hover" stroke="bold"
+        colors="primary:#ffffff,secondary:#08a88a" style="width:30px;height:30px; margin-bottom:-10px;">
+      </lord-icon>
+    </button>
+    <img src="{% static 'page_editor/logo.png' %}" height="40px" alt="Logo">
+  </div>
+  <span id="project-name" class="d-none d-md-inline-block">{{ projects.name }}</span>
+  <div class="right-content">
+    <button id="save-btn" class="btn btn-light">Save</button>
+
+    <button id="askvox" class="btn btn-light">
+      <lord-icon src="https://cdn.lordicon.com/rhprarly.json" trigger="loop" colors="primary:#ffffff,secondary:#ffffff"
+        style="width:30px;height:30px; margin-bottom:-8px;">
+      </lord-icon> Ask Vox, they say!
+    </button>
+
+    <button id="stop-btn" class="btn btn-light" style="display: none;"><i class="fas fa-stop"></i> Stop</button>
+    <button id="export-btn" class="btn btn-light"><i class="fas fa-download"></i> Export to ZIP</button>
+  </div>
+</div>
+
+<div class="app-wrap">
+
+  <div class="pages-wrp">
+    <div class="px-4 py-4" style="text-align: center;">
+      <h2>Pages</h2>
+      <!-- Your content goes here -->
+    </div>
+    <div class="pages">
+      <div v-for="page in pages" :key="page.id" :class="{page: 1, selected: isSelected(page) }"
+        @click="selectPage(page.id)">
+        <i class="fas fa-code"></i>
+        <span>[[ page.get('name') || page.id ]]</span>
+        <span v-if="!isSelected(page)" @click="editPageName(page)">
+          <lord-icon src="https://cdn.lordicon.com/wuvorxbv.json" trigger="hover" state="hover-line"
+            colors="primary:#ffffff,secondary:#ffffff" style="width:15px;height:15px;margin-bottom:-3px;">
           </lord-icon>
-        </button>
-        <img src="{% static 'page_editor/logo.png' %}" height="40px" alt="Logo">
-      </div>
-      <div class="right-content">
-        <button id="save-btn">Save</button>
+        </span>
 
-        <button id="askvox">
-          <lord-icon
-            src="https://cdn.lordicon.com/rhprarly.json"
-            trigger="loop"
-            colors="primary:#ffffff,secondary:#ffffff"
-            style="width:30px;height:30px; margin-bottom:-8px;">
-          </lord-icon> Ask Vox, they say!
-        </button>
+        <span v-if="!isSelected(page)" @click="removePage(page.id)" class="page-close"><lord-icon
+            src="https://cdn.lordicon.com/drxwpfop.json" trigger="hover" colors="primary:#ffffff,secondary:#64ccc5"
+            style="width:20px;height:20px;margin-bottom:-7px;">
+          </lord-icon></span>
 
-        <button id="stop-btn" style="display: none;"><i class="fas fa-stop"></i> Stop</button>
-        <button id="export-btn"><i class="fas fa-download"></i> Export to ZIP</button>
+
       </div>
+
     </div>
-    <div class="app-wrap">
-        
-        <div class="pages-wrp">
-          <div class="px-4 py-4" style="text-align: center;">
-            <h2>Pages</h2>
-            <!-- Your content goes here -->
-        </div>
-          <div class="pages">
-            <div v-for="page in pages" :key="page.id" :class="{page: 1, selected: isSelected(page) }" @click="selectPage(page.id)">
-              <i class="fas fa-code"></i>
-              <span>[[ page.get('name') || page.id ]]</span> 
-              <span v-if="!isSelected(page)" @click="editPageName(page)">
-                <lord-icon
-                src="https://cdn.lordicon.com/wuvorxbv.json"
-                trigger="hover"
-                state="hover-line"
-                colors="primary:#ffffff,secondary:#ffffff"
-                style="width:15px;height:15px;margin-bottom:-3px;">
-              </lord-icon>
-              </span>
 
-<span v-if="!isSelected(page)" @click="removePage(page.id)" class="page-close"><lord-icon
-    src="https://cdn.lordicon.com/drxwpfop.json"
-    trigger="hover"
-    colors="primary:#ffffff,secondary:#64ccc5"
-    style="width:20px;height:20px;margin-bottom:-7px;">
-</lord-icon></span>
-
-
-              </div>
-                                
-          </div>
-            
-          <div class="add-page" style="text-align: center;" @click="addPage">
-            <lord-icon
-            src="https://cdn.lordicon.com/wzwygmng.json"
-            trigger="hover"
-            colors="primary:#dafffb,secondary:#dafffb"
-            style="width:2em;height:2em">
-        </lord-icon>
-        </div>
-        </div>
-
-        <div class="editor-wrap">
-          <div id="gjs"></div>
-        </div>
-
-      </div>
+    <div class="add-page" style="text-align: center;" @click="addPage">
+      <lord-icon src="https://cdn.lordicon.com/wzwygmng.json" trigger="hover" colors="primary:#dafffb,secondary:#dafffb"
+        style="width:2em;height:2em">
+      </lord-icon>
     </div>
+  </div>
+
+  <div class="editor-wrap">
+    <div id="gjs"></div>
+  </div>
+
+</div>
+</div>
 
 {% include 'page_editor/footer.html' %}

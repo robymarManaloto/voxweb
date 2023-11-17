@@ -1,100 +1,96 @@
-{% include 'dashboard/header.html' %} 
+{% include 'dashboard/header.html' %}
 {% load static %}
 <div id="loading" class="loading">
-    <div class="loading-container">
-      <div class="loading-text">
-        <span><img src="{% static 'login_dashboard/dashboard/logo.png' %}" height="100em" alt="Logo"></span>        
-      </div>
+  <div class="loading-container">
+    <div class="loading-text">
+      <span><img src="{% static 'login_dashboard/dashboard/logo.png' %}" height="100em" alt="Logo"></span>
     </div>
-    </div>
+  </div>
+</div>
 
-    <!-- Redesigned Navigation Bar with Font Awesome Icons -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-      <img src="{% static 'login_dashboard/dashboard/logo.png' %}" height="40px" alt="Logo">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-user-circle"></i> Profile
-            </a>
-            <div class="dropdown-menu" aria-labelledby="profileDropdown">
-              <a class="dropdown-item" href="#" id="changePasswordBtn">
-                <i class="fas fa-key"></i> Change Password
-              </a>
-              <a class="dropdown-item" href="#" onclick="deleteAccount()">
-                <i class="fas fa-trash"></i> Delete Account
-              </a>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" onclick="logout()">
-              <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <div class="card">
-      <!-- Recent Files -->
-      <div class="card-header">
-        <h2 style="color: #ffffff;">Recent Files</h2>
-        <div class="wave"></div>
-        <div class="wave"></div>
-        <div class="wave"></div>
-      </div>
-    
-      <div class="card-body text-center">
-        <div class="list-group" id="projectList">
-            <!-- Project Items-->
-            {% for project in projects %}
-            <div id="remove_project-{{ project.id }}" class="list-group-item d-flex align-items-center">
-                <!-- Clickable Project Link -->
-                <a id="project-{{ project.id }}" href="/start_project/{{ project.id }}" class="project-link">
-                    <img src="{% static 'login_dashboard/dashboard/bot.png' %}" alt="Project Logo" class="thumbnail">
-                    <span id="text-project-{{ project.id }}">{{ project.name }}</span>
-                </a>
-        
-                <!-- Edit and Delete Icons -->
-                <div class="ml-auto">
-                    <!-- Delete Button -->
-                    <i class="delete-icon" onclick="showDeleteAlert('{{ project.id }}', '{{ project.name }}')">
-                        <lord-icon
-                            src="https://cdn.lordicon.com/drxwpfop.json"
-                            trigger="hover"
-                            colors="primary:#c71f16,secondary:#c71f16"
-                            style="width:25px;height:25px">
-                        </lord-icon>
-                    </i>
-                    
-                    <!-- Edit Button -->
-                    <i class="edit-icon" onclick="showUpdateAlert('{{ project.id }}', '{{ project.name }}')">
-                        <lord-icon
-                            src="https://cdn.lordicon.com/wuvorxbv.json"
-                            trigger="hover"
-                            state="hover-line"
-                            style="width:25px;height:25px">
-                        </lord-icon>
-                    </i>
-                </div>
-            </div>
-        {% endfor %}
-          <!-- Placeholder when no projects -->
-          <div class="placeholder-text" id="placeholderText" style="display: none; text-align: center; padding: 20px; margin: 10px;">
-            <i class="fas fa-folder-open fa-3x" style="color: #888;"></i>
-            <p style="margin-top: 10px;">No projects available.</p>
-          </div>    
+<!-- Redesigned Navigation Bar with Font Awesome Icons -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <img src="{% static 'login_dashboard/dashboard/logo.png' %}" height="40px" alt="Logo">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-user-circle"></i> Profile
+        </a>
+        <div class="dropdown-menu" aria-labelledby="profileDropdown">
+          <a class="dropdown-item" href="#" id="changePasswordBtn">
+            <i class="fas fa-key"></i> Change Password
+          </a>
+          <a class="dropdown-item" href="#" onclick="deleteAccount()">
+            <i class="fas fa-trash"></i> Delete Account
+          </a>
         </div>
-    
-        <!-- Button to start a new project -->
-        <button class="btn btn-main mt-3" id="startNewProjectBtn">
-          <i class="fas fa-plus-circle mr-2"></i> Start a New Project
-        </button>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="card">
+  <!-- Recent Files -->
+  <div class="card-header">
+    <h2 style="color: #ffffff;">Recent Files</h2>
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+  </div>
+
+  <div class="card-body text-center">
+    <div class="list-group" id="projectList">
+      <!-- Project Items-->
+      {% for project in projects %}
+      <div class="list-group-item d-flex flex-column align-items-start" id="remove_project-{{ project.id }}">
+          <!-- Clickable Project Link -->
+          <a id="project-{{ project.id }}" href="/start_project/{{ project.id }}" class="project-link">
+              <img src="{% static 'login_dashboard/dashboard/bot.png' %}" alt="Project Logo" class="thumbnail">
+              <span id="text-project-{{ project.id }}">{{ project.name }}</span><br>
+          </a>
+          <span class="last-update">Last Modified {{ project.last_update|date:"F d, Y h:i A" }}</span>
+  
+          <!-- Edit and Delete Icons -->
+          <div class="ml-auto">
+              <!-- Delete Button -->
+              <i class="delete-icon" onclick="showDeleteAlert('{{ project.id }}', '{{ project.name }}')">
+                  <lord-icon src="https://cdn.lordicon.com/drxwpfop.json" trigger="hover"
+                      colors="primary:#c71f16,secondary:#c71f16" style="width:25px;height:25px">
+                  </lord-icon>
+              </i>
+  
+              <!-- Edit Button -->
+              <i class="edit-icon" onclick="showUpdateAlert('{{ project.id }}', '{{ project.name }}')">
+                  <lord-icon src="https://cdn.lordicon.com/wuvorxbv.json" trigger="hover" state="hover-line"
+                      style="width:25px;height:25px">
+                  </lord-icon>
+              </i>
+          </div>
       </div>
-    </div>
+      {% endfor %}
+      <!-- Placeholder when no projects -->
+      <div class="placeholder-text" id="placeholderText" style="display: none; text-align: center; padding: 20px; margin: 10px;">
+          <i class="fas fa-folder-open fa-3x" style="color: #888;"></i>
+          <p style="margin-top: 10px;">No projects available.</p>
+      </div>
+  </div>
+  
+
+    <!-- Button to start a new project -->
+    <button class="btn btn-main mt-3" id="startNewProjectBtn">
+      <i class="fas fa-plus-circle mr-2"></i> Start a New Project
+    </button>
+  </div>
+</div>
 {% include 'dashboard/footer.html' %}

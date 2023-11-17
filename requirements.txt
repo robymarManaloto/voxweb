@@ -21,3 +21,4 @@ pillow
 platformdirs
 numpy
 g4f
+social-auth-app-django

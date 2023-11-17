@@ -8,13 +8,20 @@ from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 
+from django.core.exceptions import ObjectDoesNotExist
+
 def login(request):
     if request.method == 'POST':
-        username = request.POST['username']
+        username_or_email = request.POST['username_or_email']
         password = request.POST['password']
+        
         try:
-            user = UserProfile.objects.get(username=username)
-            
+            # Check if the input is an email
+            if '@' in username_or_email:
+                user = UserProfile.objects.get(email=username_or_email)
+            else:
+                user = UserProfile.objects.get(username=username_or_email)
+
             if check_password(password, user.password):
                 # Add username and email to the session
                 request.session['username'] = user.username
@@ -29,8 +36,8 @@ def login(request):
                 })
             else:
                 return JsonResponse({'success': False, 'message': 'Invalid password.'})
-        except UserProfile.DoesNotExist:
-            return JsonResponse({'success': False, 'message': 'Username does not exist.'})
+        except ObjectDoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Invalid username or email.'})
 
     return render(request, 'login.html')
 
@@ -75,7 +82,7 @@ def dashboard(request):
     username = request.session['username']
     
     # Retrieve projects for the logged-in user
-    user_projects = Project.objects.filter(user__username=username)
+    user_projects = Project.objects.filter(user__username=username).order_by('-last_update')
 
     return render(request, 'dashboard.html', {'username': username, 'projects': user_projects})
 
@@ -101,14 +108,14 @@ def change_password(request):
 
         # Check if the old password is valid
         if not check_password(old_password, user.password):
-            return JsonResponse({'success': False, 'error': 'Invalid old password'})
+            return JsonResponse({'success': False, 'message': 'Invalid old password. '})
 
         # Check if the new password and confirm password match
         if new_password != confirm_password:
-            return JsonResponse({'success': False, 'error': 'New password and confirm password do not match'})
+            return JsonResponse({'success': False, 'message': 'New password and confirm password do not match. '})
 
         if len(new_password) < 8:
-            return JsonResponse({'success': False, 'message': 'Password must be at least 8 characters long.'})
+            return JsonResponse({'success': False, 'message': 'Password must be at least 8 characters long. '})
 
         # Update the user's password
         user.password = make_password(new_password)

@@ -38,10 +38,10 @@ listener.onend = function () {
 };
 
 recognition.onstart = function () {
-    listeningText.style.display = "block";
-    firstText.style.display = "none";
-    speak("I'm now listening. How can I assist you today?");
-    const newHTMLContent = `
+  listeningText.style.display = "block";
+  firstText.style.display = "none";
+  speak("I'm now listening. How can I assist you today?");
+  const newHTMLContent = `
     <lord-icon
     src="https://cdn.lordicon.com/cpmcynxu.json"
     trigger="loop"
@@ -49,21 +49,41 @@ recognition.onstart = function () {
     colors="primary:#ffffff,secondary:#64ccc5"
     style="width:250px;height:250px">
     </lord-icon>`;
-    animateButtonContent(newHTMLContent, startBtn);
+  animateButtonContent(newHTMLContent, startBtn);
 };
 
 recognition.onresult = function (event) {
   const result = event.results[0][0].transcript;
+  restartRecognition();
   processTranscript(result);
+  console.log(result);
 };
 
 recognition.onend = function () {
-  restartRecognition();
+  const newHTMLContent = `
+  <lord-icon
+    src="https://cdn.lordicon.com/xumlwjxf.json"
+    trigger="loop"
+    colors="primary:#DAFFFB,secondary:#dafffb,tertiary:#64ccc5"
+    style="width:250px;height:250px">
+  </lord-icon>`;
+  animateButtonContent(newHTMLContent, startBtn);
 };
 
 // Change icon if started or not
 startBtn.addEventListener("click", function () {
-  if (!isRecognitionStarted) {
+  if (isRecognitionStarted) {
+    isRecognitionStarted = false;
+    recognition.stop();
+    const newHTMLContent = `
+    <lord-icon
+      src="https://cdn.lordicon.com/xumlwjxf.json"
+      trigger="loop"
+      colors="primary:#DAFFFB,secondary:#dafffb,tertiary:#64ccc5"
+      style="width:250px;height:250px">
+    </lord-icon>`;
+    animateButtonContent(newHTMLContent, startBtn);
+  } else {
     listener.stop();
     recognition.start();
     isRecognitionStarted = true;
@@ -76,47 +96,39 @@ startBtn.addEventListener("click", function () {
     style="width:250px;height:250px">
     </lord-icon>`;
     animateButtonContent(newHTMLContent, startBtn);
-  } else {
-    recognition.stop();
-    const newHTMLContent = `
-    <lord-icon
-      src="https://cdn.lordicon.com/xumlwjxf.json"
-      trigger="loop"
-      colors="primary:#DAFFFB,secondary:#dafffb,tertiary:#64ccc5"
-      style="width:250px;height:250px">
-    </lord-icon>`;
-    animateButtonContent(newHTMLContent, startBtn);
   }
 });
 
 // Make transition to button
 function animateButtonContent(htmlContent, button) {
-    startBtn.style.opacity = 0;
-    startBtn.addEventListener('transitionend', () => {
-        startBtn.innerHTML = htmlContent;
-        startBtn.style.opacity = 1;
-    });
-    startBtn.style.transition = 'opacity 0.5s ease-in-out';
+  startBtn.style.opacity = 0;
+  startBtn.addEventListener('transitionend', () => {
+    startBtn.innerHTML = htmlContent;
+    startBtn.style.opacity = 1;
+  });
+  startBtn.style.transition = 'opacity 0.5s ease-in-out';
 }
 
 function restartRecognition() {
-  output.innerHTML = '';
-  listener.start();
   isRecognitionStarted = false;
   listeningText.style.display = "none";
-  firstText.style.display =  "block";
-}
-
-// Check if transcript is enough
-function processTranscript(transcript) {
-  if (transcript.length > 100) {
-    confirmTranscript(transcript);
-  } else {
-    notEnoughInfo();
+  firstText.style.display = "block";
+  try{
+    listener.start();
+  }catch(err){
+    console.log('It is started but oh well.');
   }
 }
 
-// Send alert if the info is not enough
+function processTranscript(transcript) {
+  confirmTranscript(transcript);
+  // if (transcript.length > 100) {
+  //   confirmTranscript(transcript);
+  // } else {
+  //   notEnoughInfo();
+  // }
+}
+
 function notEnoughInfo() {
   speak("I'm sorry, but it seems like you didn't provide enough information for me to assist you effectively. Can you please provide more details?");
   Swal.fire({
@@ -129,6 +141,7 @@ function notEnoughInfo() {
 
 // Send transcript to process if confirmed
 function confirmTranscript(transcription) {
+  restartRecognition();
   Swal.fire({
     title: 'Are you sure?',
     text: `Do you want to proceed to the next page with this transcript?`,
@@ -140,7 +153,7 @@ function confirmTranscript(transcription) {
   }).then((result) => {
     if (result.isConfirmed) {
       loaderContainer.style.display = 'grid';
-      loaderContainer.style.transition= 'opacity 0.5s ease-in-out';
+      loaderContainer.style.transition = 'opacity 0.5s ease-in-out';
       sendTranscript(transcription);
       speak("Please be patient. The system is now building your website. This may take a few moments.");
     }
@@ -149,25 +162,31 @@ function confirmTranscript(transcription) {
 
 // Generate the files needed, go to editor if finished
 function sendTranscript(transcription) {
-  var csrftoken = $("[name=csrfmiddlewaretoken]").val();
   $.ajax({
-    url: "/process_transcription/"+projectId+"/",
+    url: "/process_transcription/" + projectId + "/",
     type: "POST",
-    headers: {
-      "X-CSRFToken": csrftoken
-    },
     data: {
       'transcription': transcription
     },
     success: function (data) {
-      window.location.href = "/page_editor/";
+      if (data.error === false) {
+        // No error, redirect to the next page
+        window.location.href = "/page_editor/" + projectId + "/";
+      } else {
+        // Display a SweetAlert with success message
+        Swal.fire({
+          title: 'Success',
+          text: data.message,
+          icon: 'success',
+        });
+      }
     },
     error: function (xhr, status, error) {
-      console.error(error);
       loaderContainer.style.display = 'none';
+      // Display a SweetAlert with error message
       Swal.fire({
         title: 'Error',
-        text: 'There was an error processing the transcription. Retry?',
+        text: xhr.responseJSON.message || 'There was an error processing the transcription. Retry?',
         icon: 'error',
         showCancelButton: true,
         confirmButtonText: 'Retry',
@@ -177,30 +196,30 @@ function sendTranscript(transcription) {
           sendTranscript(transcription);
         }
       });
-      speak("Oops! It looks like an error occurred. Please try again. If the issue persists, feel free to ask for help, and I'll do my best to assist you.");
+      speak(xhr.responseJSON.message || 'There was an error processing the transcription. Retry?');
     }
   });
 }
 
 // Check microphone to use the speech synthesis
 document.addEventListener('DOMContentLoaded', (event) => {
-   // Check if the microphone is available
-   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+  // Check if the microphone is available
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     // Microphone not detected, show SweetAlert
     loader.style.display = "none";
     Swal.fire({
-        title: 'Microphone Not Detected',
-        text: 'Please make sure your microphone is connected and try again.',
-        icon: 'error',
-        confirmButtonText: 'Go Back',
-        allowOutsideClick: false
+      title: 'Microphone Not Detected',
+      text: 'Please make sure your microphone is connected and try again.',
+      icon: 'error',
+      confirmButtonText: 'Go Back',
+      allowOutsideClick: false
     }).then((result) => {
-        if (result.isConfirmed) {
-            // User clicked "Go Back", navigate back
-            window.history.back();
-        }
+      if (result.isConfirmed) {
+        // User clicked "Go Back", navigate back
+        window.history.back();
+      }
     });
-  }else{
+  } else {
     const microphoneIcon = document.createElement('i');
     microphoneIcon.classList.add('fas', 'fa-microphone');
     const microphoneLabel = document.createElement('span');
@@ -208,7 +227,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const titleContainer = document.createElement('div');
     titleContainer.appendChild(microphoneIcon);
     titleContainer.appendChild(microphoneLabel);
-  
+
     Swal.fire({
       title: titleContainer,
       text: 'Please allow access to your microphone to continue.',
@@ -221,7 +240,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
           icon: 'error',
           showConfirmButton: false,
           allowOutsideClick: false,
-        });      
+        });
       } else {
         speak('"Hello there! I\'m Vox. Thanks for reaching out. To begin creating your website, click the button or simply say \'Vox\'."');
       }
@@ -240,7 +259,7 @@ function speak(text) {
 
 // Start first to change the voice
 window.speechSynthesis.onvoiceschanged = () => {
-  speak("Please allow access to your microphone to continue.");
+  speak("");
 };
 
 const siriWave = new SiriWave({
@@ -252,22 +271,22 @@ const siriWave = new SiriWave({
   amplitude: 0.8,
 });
 
-  document.getElementById('back-button').addEventListener('click', function() {
-    // Display a SweetAlert confirmation dialog
-    Swal.fire({
-        title: 'Are you sure?',
-        text: 'Do you really want to go back to dashboard?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, go back!',
-        cancelButtonText: 'No, cancel'
-    }).then((result) => {
-        // If the user clicks "Yes, go back!", navigate to '/dashboard/'
-        if (result.isConfirmed) {
-            window.location.href = '/dashboard/';
-        }
-    });
-    
+document.getElementById('back-button').addEventListener('click', function () {
+  // Display a SweetAlert confirmation dialog
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'Do you really want to go back to dashboard?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, go back!',
+    cancelButtonText: 'No, cancel'
+  }).then((result) => {
+    // If the user clicks "Yes, go back!", navigate to '/dashboard/'
+    if (result.isConfirmed) {
+      window.location.href = '/dashboard/';
+    }
   });
+
+});

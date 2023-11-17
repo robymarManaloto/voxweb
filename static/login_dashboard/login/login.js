@@ -1,9 +1,9 @@
 const toggleForm = () => {
     const container = document.querySelector('.container');
     container.classList.toggle('active');
-  };
+};
 
-  $(document).ready(function () {
+$(document).ready(function () {
     $('#login-form').submit(function (e) {
         e.preventDefault();
         $.ajax({
@@ -37,7 +37,7 @@ const toggleForm = () => {
             success: function (data) {
                 if (data.success) {
                     // Redirect to the login page on successful registration
-                        Swal.fire({
+                    Swal.fire({
                         icon: 'success',
                         title: 'Registration Successful',
                         text: 'You have been successfully registered!',
