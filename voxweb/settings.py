@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-v52xfvduc!72y@_^uq*vddpf^4d_m607#5y-&23mfri7)+jc$q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'voice_recognition',
     'page_editor',
     'login_dashboard',
+    'voxweb',
 ]
 
 MIDDLEWARE = [

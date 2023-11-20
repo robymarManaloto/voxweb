@@ -77,7 +77,7 @@ Ensure the following software and tools are installed:
 6. Start the development server:
 
    ```bash
-   python manage.py runserver
+   python manage.py runserver --insecure
    ```
 
 Your Django app should now be running at http://127.0.0.1:8000/. You can access the admin panel at http://127.0.0.1:8000/admin/ using the superuser credentials you created.
