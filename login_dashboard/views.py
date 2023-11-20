@@ -7,7 +7,6 @@ from .forms import RegistrationForm
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-
 from django.core.exceptions import ObjectDoesNotExist
 
 def login(request):

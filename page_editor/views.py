@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
-import os
-from django.http import JsonResponse
-import re
-from . import regen
-from login_dashboard.models import Project, Page
-import json
 from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from login_dashboard.models import Project, Page
+from .regen import generate
+import re
+import json
 
 # Render the editor page
 def page_editor(request, project_id):
@@ -58,8 +57,7 @@ def regenerate_page(request):
             name = request.POST.get('name')
 
             # Generate new HTML using the 'regen' module
-            result = regen.generate(transcription, html)
-            print(result)
+            result = generate(transcription, html)
             if result['error'] == 'false':
                 name_page = Page.objects.create(
                     project_id = project,
@@ -81,7 +79,7 @@ def regenerate_page(request):
                     </html>
                     """
                 )
-                result['id'] = name_page.id
+                result['id'] = str(name_page.id)
                 return JsonResponse(result)
             else:
                 response_data = {'error': True, 'message': result['message']}

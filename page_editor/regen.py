@@ -5,7 +5,7 @@ import json
 
 module_dir = os.path.join(os.path.dirname(__file__), '../libraries')
 sys.path.append(module_dir)
-from gpt4free import g4f
+from libraries.gpt4free import g4f
 
 # Define a function to generate a web page based on a given transcript and current HTML content
 def generate(transcript, curr_html):
